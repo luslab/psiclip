@@ -11,3 +11,6 @@ Note that post-"substratome" mapping is done to the yeast genome in this script,
 
 ## Scripts for downstream analysis
 The main concept for the downstream analysis is that cDNAs mapping to the substratome are normalised to the total cDNAs that map to the yeast genome, because we found that this behaved a lot like a spike-in. We also gaussian smooth the signal and subtract the FLAG-tagged experimental condition from the non-tagged condition. 
+
+## Contact
+Charlotte Capitanchik, charlotte.capitanchik@crick.ac.uk if you have questions.
