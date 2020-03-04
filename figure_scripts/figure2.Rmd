@@ -1,0 +1,174 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# loading libraries
+```{r, warning=FALSE}
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(ggthemes)
+library(cowplot)
+library(lemon)
+library(plyr)
+library(quantreg)
+library(forcats)
+library(ggridges)
+library(smoother)
+```
+
+# functions
+```{r}
+read_annotation_files <- function(mfiles) {
+          mmaps = lapply(mfiles, fread)
+          mmaps_names <- gsub(paste0(".", searchpat),"", mfiles)
+          mmaps_names <- gsub(paste0(dir, "/"),"", mmaps_names)
+          names(mmaps) <- mmaps_names
+          for (i in 1:length(mmaps)){
+            mmaps[[i]]$sample <- mmaps_names[[i]]
+            mmaps[[i]]$librarysize <- sum(mmaps[[i]]$V5)
+            mmaps[[i]] <- mmaps[[i]] %>% group_by(sample) %>% mutate(snRNAsubstrate_librarysize = sum(V5[grepl("_|U", V1)]))
+          }
+          summary_df <- do.call(rbind, mmaps)
+          return(summary_df)
+}
+```
+
+# read in data
+```{r}
+dir = "../../results/merged" #"m6A_WT_miCLIP" #
+searchpat = "cdnacounts" #"mergedClusterCoverage.50.bed"#
+mfiles = list.files(path=dir, pattern=searchpat, full.names=TRUE)
+mfiles <- mfiles[grepl("exp8|exp21|exp4_8", mfiles) & !grepl("PRP16", mfiles)]
+df <- read_annotation_files(mfiles)
+
+manifest <- fread("../../../../lisa/paper/manifest.csv")
+sm_sites <- fread("../../../../lisa/paper/sm_sites.csv")
+```
+
+# Plot SmB over snRNAs
+
+```{r}
+df_U <- df %>% filter(grepl("_|U", V1))
+df_U$sample <- as.factor(df_U$sample)
+df_U <- left_join(df_U, manifest, by=c("sample"="sample_name"))
+df_U$snRNAsubstrate_norm <- df_U$V5 / df_U$snRNAsubstrate_librarysize
+
+samp_names <- c("SMB1_FLAG_His_UBC4_AC_short_exp8", "SMB1_FLAG_ACT1_AC_exp21")
+snRNAs <- c("U1", "U2", "U4", "U5", "U6")
+
+plot_snrnas <- function(snRNAs, samp_names, sm_sites, df_U){
+  for (samp_name in samp_names){
+    for (RNA in snRNAs){
+      temp_a <- ggplot(df_U[(df_U$V1==RNA) & (df_U$sample==samp_name),]) +
+                scale_x_continuous(limits=c(0,1200), breaks=seq(0,1200,100), labels=seq(0,1200,100))
+
+      if (RNA != "U6"){
+          temp_b <- temp_a + annotate("rect",
+                 xmin = sm_sites[sm_sites$snRNA==RNA,]$start,
+                 xmax = sm_sites[sm_sites$snRNA==RNA,]$end,
+                 ymin = 0,
+                 ymax = max(df_U[(df_U$V1==RNA) & (df_U$sample==samp_name),]$snRNAsubstrate_norm),
+                 alpha = .5, fill="red") +
+                 geom_col(aes(x=V2, y=snRNAsubstrate_norm)) +
+                 theme_few() +
+        scale_y_continuous(labels = scales::percent) +
+        xlab(RNA) 
+
+        } else if (RNA == "U6") {
+          temp_b <- temp_a +
+                      geom_col(aes(x=V2, y=snRNAsubstrate_norm)) +
+                      theme_few() +
+        scale_y_continuous(labels = scales::percent) +
+        xlab(RNA) 
+          print("doing it")
+        }
+      boxplot <- ggplot(df_U[(df_U$V1==RNA) & (df_U$sample==samp_name),]) + 
+        stat_boxplot(aes(y=V2, weight=snRNAsubstrate_norm), geom ='errorbar', width = 0.2, lwd=0.4) +
+        geom_boxplot(aes(y=V2, weight=snRNAsubstrate_norm), outlier.alpha=0.3, outlier.shape=18, lwd=0.4, fatten=1) +
+        ylim(0,1200)+
+        coord_flip() +
+        theme_few() +
+        theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank()) +
+        ggtitle(samp_name) 
+      
+      final <- plot_grid(boxplot, temp_b, nrow=2, align="v", rel_heights=c(1.5,3))
+      ggsave(final, filename = paste0(RNA,"_histogram_withBoxPlot_",samp_name,".eps"), width=10, height=2.5)
+      ggsave(final, filename = paste0(RNA,"_histogram_withBoxPlot_",samp_name,".pdf"), width=10, height=2.5)
+      temp_b <- NULL
+      temp_a <- NULL
+  }
+  }
+}
+
+plot_snrnas(snRNAs, samp_names, sm_sites, df_U)
+```
+
+# Amounts boxplots Figure 1A
+```{r}
+df_U_summary <- df_U %>% dplyr::group_by(V1, condition, protein, exp) %>% filter(!grepl("noUV_no_FLAGed_protein", sample)) %>% dplyr::summarise(total=sum(V5)) %>% ungroup() %>% dplyr::group_by(V1, protein, exp) %>% dplyr::mutate(fraction=total/total[condition=="UV"])
+
+a <- ggplot(df_U_summary, aes(x=condition, y=total)) + geom_col() + lemon::facet_rep_wrap(~V1+exp, ncol=2, scales="free_y")+ theme(aspect.ratio=1)
+ggsave(a, filename = "bar_graphs.eps", width=5, height=12)
+ggsave(a, filename = "bar_graphs.pdf", width=5, height=12)
+
+df_U_summary
+a <- ggplot(df_U_summary, aes(x=condition, y=fraction)) + geom_col() + lemon::facet_rep_wrap(~V1+exp, ncol=2, scales="free_y")+ theme(aspect.ratio=1) +
+        scale_y_continuous(labels = scales::percent)
+ggsave(a, filename = "bar_graphs_percent.eps", width=5, height=12)
+ggsave(a, filename = "bar_graphs_percent.pdf", width=5, height=12)
+```
+
+# All experiment summary - read in data
+
+```{r}
+# Read in all data 
+dir = "../../results/merged" #"m6A_WT_miCLIP" #
+searchpat = "cdnacounts" #"mergedClusterCoverage.50.bed"#
+mfiles = list.files(path=dir, pattern=searchpat, full.names=TRUE)
+
+mfiles <- mfiles[grepl(paste(manifest$sample_name,collapse="|"), mfiles)]
+df <- read_annotation_files(mfiles)
+```
+
+# All experiment summary - Plot
+
+```{r}
+df <- df %>% filter(grepl("_|U", V1)) %>% mutate(substrate=grepl("_", V1))
+df$substrate <- df$substrate %>% gsub(TRUE, "substrate", .) %>% gsub(FALSE, "snRNA", .)
+
+DF <- df %>% dplyr::group_by(sample, snRNAsubstrate_librarysize) %>% dplyr::summarise(ratio=sum(V5[substrate=="substrate"])/sum(V5[substrate=="snRNA"]))
+DF <- left_join(DF, manifest, by=c("sample"="sample_name"))
+DF$sample <- as.factor(DF$sample)
+
+A <-ggplot(DF, aes(y=ratio, x=fct_reorder(sample, protein))) + 
+  geom_col() + 
+  facet_wrap(~protein+mutant+substrate+dbr1+condition, scales="free_x", nrow=1) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) + theme(panel.spacing = unit(0, "lines")) +
+  ylab("enrichment for\nsubstrate over snRNA")
+
+print(A)
+
+ggsave(A, filename = "bar_graphs_AllExpOVERVIEW.eps", width=20, height=3)
+ggsave(A, filename = "bar_graphs_AllExpOVERVIEW.pdf", width=20, height=3)
+  
+```
+
+# RNA biotype distribution
+
+```{r}
+ex8 = df_U %>% filter(sample == "SMB1_FLAG_His_UBC4_AC_short_exp8" | sample == "SMB1_FLAG_ACT1_AC_exp21") %>%
+  mutate(V1=gsub("AC.*", "substrate", V1)) %>% dplyr::group_by(V1,sample) %>% dplyr::summarise(total=sum(V5))
+
+ggplot(ex8, aes(x=sample,y=total,fill=V1)) + geom_bar(stat="identity", position="fill") + theme_few() + coord_flip()
+ggsave("smb1_library_distribution.pdf", width=8,height=3)
+```
+

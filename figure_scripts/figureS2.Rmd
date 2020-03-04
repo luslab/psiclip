@@ -1,0 +1,139 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(data.table)
+```
+
+Need to generate basecounts files first. For this I used bam-readcount. 
+
+```{bash}
+bam-readcount -f ../custom_genome/WT_actin.fa ../results/mapped/Prp16_FLAG_ACT1_WT_exp31.Aligned.out.sorted.DEDUPLICATED.bam WT_actin > Prp16_FLAG_ACT1_WT_exp31.noDBR1basecounts.txt
+
+bam-readcount -f ../custom_genome/WT_actin.fa ../results/mapped/Prp16_G378A-FLAG_ACT1_WT_exp31.Aligned.out.sorted.DEDUPLICATED.bam WT_actin > Prp16_G378A-FLAG_ACT1_WT_exp31.noDBR1basecounts.txt
+
+bam-readcount -f ../custom_genome/WT_long_ome.fa ../results/mapped/Prp16_FLAG_UBC4_WT_long_exp30.Aligned.out.sorted.DEDUPLICATED.bam WT_long > Prp16_FLAG_UBC4_WT_long_exp30.noDBR1basecounts.txt
+
+bam-readcount -f ../custom_genome/WT_long_ome.fa ../results/mapped/Prp16_G378A_FLAG_UBC4_WT_long_exp30.Aligned.out.sorted.DEDUPLICATED.bam WT_long > Prp16_G378A_FLAG_UBC4_WT_long_exp30.noDBR1basecounts.txt 
+
+bam-readcount -f ../custom_genome/WT_actin.fa ../results/mapped/Prp16_FLAG_ACT1_WT_DBR1_exp32.Aligned.out.sorted.DEDUPLICATED.bam WT_actin > Prp16_FLAG_ACT1_WT_exp32.DBR1basecounts.txt
+
+bam-readcount -f ../custom_genome/WT_actin.fa ../results/mapped/Prp16_G378A-FLAG_ACT1_WT_DBR1_exp32.Aligned.out.sorted.DEDUPLICATED.bam WT_actin > Prp16_G378A-FLAG_ACT1_WT_exp32.DBR1basecounts.txt
+
+bam-readcount -f ../custom_genome/WT_long_ome.fa ../results/mapped/Prp16-FLAG_UBC4_WT_long_DBR1_exp24.Aligned.out.sorted.DEDUPLICATED.bam WT_long > Prp16-FLAG_UBC4_WT_long_DBR1_exp24.DBR1basecounts.txt
+
+bam-readcount -f ../custom_genome/WT_long_ome.fa ../results/mapped/Prp16-G378A-FLAG_UBC4_WT_long_DBR1_exp24.Aligned.out.sorted.DEDUPLICATED.bam WT_long > Prp16-G378A-FLAG_UBC4_WT_long_DBR1_exp24.DBR1basecounts.txt
+
+echo "done"
+```
+
+
+
+```{r}
+mfiles = list.files(path=".",pattern="basecounts.txt", full.names=TRUE) 
+mmaps = lapply(mfiles, read.table, sep="\t", fill=TRUE)
+mmaps_names <- gsub("\\.\\/|.noDBR1basecounts.txt|.DBR1basecounts.txt","", mfiles)
+names(mmaps) <- mmaps_names
+for (i in 1:length(mmaps)){
+  mmaps[[i]]$sample <- mmaps_names[[i]]
+}
+```
+
+# Branchpoint
+
+```{r}
+sdf <- do.call(rbind,mmaps) 
+sdf <- data.frame(sdf)
+rownames(sdf) <- c()
+colnames(sdf) <- c("sub","pos","refNuc","reads","remove","A","C","G","T","other","sample")
+sdf = sdf %>% select(-remove)
+
+sdf = sdf %>% mutate(bp=ifelse(sub=="WT_actin",398,
+                         ifelse(sub=="WT_long",232,NA)))
+sdf = sdf %>% filter(pos==bp) %>% mutate(DBR1=grepl("exp32|exp24",sample)) %>%
+  mutate(A=sapply(strsplit(as.character(A),":"), "[[", 2),
+         C=sapply(strsplit(as.character(C),":"), "[[", 2),
+         G=sapply(strsplit(as.character(G),":"), "[[", 2),
+         T=sapply(strsplit(as.character(T),":"), "[[", 2)) %>%
+  mutate(reads=as.numeric(reads), A=as.numeric(A), C=as.numeric(C), G=as.numeric(G),
+         T=as.numeric(T)) %>%
+  mutate(A=A/reads,
+         C=C/reads,
+          G=G/reads,
+           T=T/reads)
+plots = melt(sdf) %>% filter(sample != "Prp16_FLAG_ACT1_WT_exp31") %>% filter(variable!="reads" & variable!="bp")
+
+mean_plots = plots %>% dplyr::group_by(DBR1, variable) %>% dplyr::summarise(mean=mean(value))
+
+ggplot(plots, aes(x=variable, y=value, colour=variable)) + geom_point() + theme_few() +
+  facet_wrap(~DBR1) + ylim(c(0,1)) + geom_point(data=mean_plots,aes(x=variable, y=mean), shape=4, color="black") + ylab("proportion") + xlab("") + ggtitle("BP") + theme(aspect.ratio=1)
+ggsave("branchpoint.pdf")
+
+```
+# 3'SS
+
+```{r}
+sdf <- do.call(rbind,mmaps) 
+sdf <- data.frame(sdf)
+rownames(sdf) <- c()
+colnames(sdf) <- c("sub","pos","refNuc","reads","remove","A","C","G","T","other","sample")
+sdf = sdf %>% select(-remove)
+
+sdf = sdf %>% mutate(bp=ifelse(sub=="WT_actin",442,
+                         ifelse(sub=="WT_long",258,NA)))
+sdf = sdf %>% filter(pos==bp) %>% mutate(DBR1=grepl("exp32|exp24",sample)) %>%
+  mutate(A=sapply(strsplit(as.character(A),":"), "[[", 2),
+         C=sapply(strsplit(as.character(C),":"), "[[", 2),
+         G=sapply(strsplit(as.character(G),":"), "[[", 2),
+         T=sapply(strsplit(as.character(T),":"), "[[", 2)) %>%
+  mutate(reads=as.numeric(reads), A=as.numeric(A), C=as.numeric(C), G=as.numeric(G),
+         T=as.numeric(T)) %>%
+  mutate(A=A/reads,
+         C=C/reads,
+          G=G/reads,
+           T=T/reads)
+sdf
+plots = melt(sdf) %>% filter(sample != "Prp16_FLAG_ACT1_WT_exp31") %>% filter(variable!="reads" & variable!="bp")
+
+mean_plots = plots %>% dplyr::group_by(DBR1, variable) %>% dplyr::summarise(mean=mean(value))
+
+ggplot(plots, aes(x=variable, y=value, colour=variable)) + geom_point() + theme_few() +
+  facet_wrap(~DBR1) + ylim(c(0,1)) + geom_point(data=mean_plots,aes(x=variable, y=mean), shape=4, color="black") + ylab("proportion") + xlab("") + ggtitle("3'SS") + theme(aspect.ratio=1)
+ggsave("3ss.pdf")
+```
+# 5'SS
+
+```{r}
+sdf <- do.call(rbind,mmaps) 
+sdf <- data.frame(sdf)
+rownames(sdf) <- c()
+colnames(sdf) <- c("sub","pos","refNuc","reads","remove","A","C","G","T","other","sample")
+sdf = sdf %>% select(-remove)
+sdf
+sdf = sdf %>% mutate(bp=ifelse(sub=="WT_actin",132,
+                         ifelse(sub=="WT_long",162,NA)))
+sdf = sdf %>% filter(pos==bp) %>% mutate(DBR1=grepl("exp32|exp24",sample)) %>%
+  mutate(A=sapply(strsplit(as.character(A),":"), "[[", 2),
+         C=sapply(strsplit(as.character(C),":"), "[[", 2),
+         G=sapply(strsplit(as.character(G),":"), "[[", 2),
+         T=sapply(strsplit(as.character(T),":"), "[[", 2)) %>%
+  mutate(reads=as.numeric(reads), A=as.numeric(A), C=as.numeric(C), G=as.numeric(G),
+         T=as.numeric(T)) %>%
+  mutate(A=A/reads,
+         C=C/reads,
+          G=G/reads,
+           T=T/reads)
+
+plots = melt(sdf) %>% filter(sample != "Prp16_FLAG_ACT1_WT_exp31") %>% filter(variable!="reads" & variable!="bp")
+
+mean_plots = plots %>% dplyr::group_by(DBR1, variable) %>% dplyr::summarise(mean=mean(value))
+
+ggplot(plots, aes(x=variable, y=value, colour=variable)) + geom_point() + theme_few() +
+  facet_wrap(~DBR1) + ylim(c(0,1)) + geom_point(data=mean_plots,aes(x=variable, y=mean), shape=4, color="black") + ylab("proportion") + xlab("") + ggtitle("5'SS") + theme(aspect.ratio=1)
+ggsave("5ss.pdf")
+```
+

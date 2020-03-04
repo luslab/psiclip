@@ -1,0 +1,749 @@
+# Import config file & parameters
+configfile: 'config.yaml'
+
+# The first rule in the document contains a list of all the deadend outputs expected
+# from the pipeline, that is, every output that isn't used in a subsequent rule.
+rule all:
+    input:
+        expand("results/fastqc/{sample}_fastqc.html", sample=config["samples"]),
+        expand("results/trim_galore/{sample}_trimmed.fq.gz", sample=config["samples"]),
+        "results/AC_star_index/exonInfo.tab",
+        "results/DG_star_index/exonInfo.tab",
+        "results/WT1400_star_index/exonInfo.tab",
+        "results/WTLS54_star_index/exonInfo.tab",
+        "results/AC_LONG_star_index/exonInfo.tab",
+        "results/WT_LONG_star_index/exonInfo.tab",
+        expand("results/mapped/{sample}.Aligned.out.forward.sorted.bam", sample=config["samples"]),
+        expand("results/xlsites/{sample}.small.bedgraph", sample=config["samples"]),
+        # Uncomment the below statement to calculate mapped cDNA lengths
+        #expand("results/lengths/{sample}.lengths.tsv", sample=config["samples"]),
+        expand("results/genome_mapped/{sample}.Aligned.sortedByCoord.out.bam", sample=config["samples"]),
+        expand("results/merged/{sample}.cdnacounts", sample=config["samples"]),
+        expand("results/merged/{sample}.bed", sample=config["samples"]),
+        expand("results/mapped/{sample}.Aligned.out.sorted.DEDUPLICATED.bam", sample=config["samples"]),
+        expand("results/mapped/{sample}.Aligned.out.sorted.DEDUPLICATED.bam.bai", sample=config["samples"])
+        # Uncomment the below statements to map to phiX at the end 
+        # as an additional contamination check
+        #expand("results/phiX_mapped/{sample}.Aligned.out.sam", sample=config["samples"])
+        #expand("results/logs/{sample}.phiX_mapped.Log.final.out", sample=config["samples"])
+
+# Reads are dumultiplexed prior to the pipeline using iCount demultiplex
+
+rule fastqc:
+    input:
+        lambda wildcards: config["samples"][wildcards.sample][0]
+    output:
+        html="results/fastqc/{sample}_fastqc.html",
+        zipped="results/fastqc/{sample}_fastqc.zip"
+    params:
+        fc="--outdir results/fastqc",
+        cluster= '-N 1 -c 4 --mem=8G --part=cpu -t 1:00:00'
+    threads:
+        4
+    run:
+        shell("fastqc -t {threads} {input} {params.fc}")
+        fastqc_out = "/".join(("results/fastqc", os.path.basename(input[0])))
+        fastqc_out = "_".join((fastqc_out, "fastqc.html"))
+        fastqc_out = fastqc_out.replace(".fq.gz","")
+        fastqc_zip = fastqc_out.replace("fastqc.html","fastqc.zip")
+        shell("echo {fastqc_out}")
+        shell("mv {fastqc_out} {output.html}")
+        shell("mv {fastqc_zip} {output.zipped}")
+
+# # We now trim the 3' adaptor if there is any and run fastqc again to see how we did
+
+rule trimGalore:
+    input:
+        lambda wildcards: config["samples"][wildcards.sample][0]
+    output:
+        fastq="results/trim_galore/{sample}_trimmed.fq.gz",
+        report="results/trim_galore/{sample}.fq.gz_trimming_report.txt",
+        fastqc="results/trim_galore/{sample}_trimmed_fastqc.html",
+        fastqc_zip="results/trim_galore/{sample}_trimmed_fastqc.zip"
+    params:
+        basic="-q 20 --gzip --length 11 --fastqc",
+        outputfolder="-o results/trim_galore",
+        log="results/trim_galore/{sample}_trimming_report.txt",
+        adaptor="" if config["trim_galore_params"]==True else "-a "+config["trim_galore_params"],
+        cluster= '-N 1 -c 5 --mem=30G --part=cpu -t 1:00:00'
+    run:
+        shell("trim_galore {params.basic} {params.outputfolder} {params.adaptor} {input} &> {params.log}")
+        trimmed_out = "/".join(("results/trim_galore", os.path.basename(input[0])))
+        trimmed_rep = "_".join((trimmed_out, "trimming_report.txt"))
+        trimmed_out = trimmed_out.replace(".fq.gz","")
+        trimmed_out = "_".join((trimmed_out, "trimmed.fq.gz"))
+        trimmed_fastqc = trimmed_out.replace("trimmed.fq.gz","trimmed_fastqc.html")
+        trimmed_fastqc_zip = trimmed_out.replace("trimmed.fq.gz","trimmed_fastqc.zip")
+        shell("echo {trimmed_out}")
+        shell("mv {trimmed_out} {output.fastq}")
+        shell("mv {trimmed_rep} {output.report}")
+        shell("mv {trimmed_fastqc} {output.fastqc}")
+        shell("mv {trimmed_fastqc_zip} {output.fastqc_zip}")
+
+# # # Create a multiQC report to get an overview of whether there are any really bad samples
+# # # and it is useful to compare untrimmed vs. trimmed samples
+# This breaks every time I try to add it to the pipeline, it is easy to do outside
+# just type multiqc . in the folder with logs with the multiqc module loaded
+# # rule multiQC:
+# #     input:
+# #         "results/fastqc" # this is the folder that contains all the fastQC reports
+# #     output:
+# #         "results/multiQC/multiqc_report.html"
+# #     shell:
+# #         """
+# #         module load MultiQC/0.9-foss-2016b-Python-2.7.12
+# #         multiqc {input} -o results/multiQC -f
+# #         """
+# # Generate the STAR indexes for the different substrates.
+# # Note that DG is exactly the same sequence-wise as WT1400 but I keep them
+# # separate here just for clarity so we don't get confused
+
+rule AC_starIndex:
+    input:
+        genome_fasta=config["AC_genome"],
+        gtf=config["AC_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/AC_star_index/",
+        cluster= '-p hmem -J AC_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/AC_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule DG_starIndex:
+    input:
+        genome_fasta=config["DG_genome"],
+        gtf=config["DG_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/DG_star_index/",
+        cluster= '-p hmem -J DG_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/DG_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule WT1400_starIndex:
+    input:
+        genome_fasta=config["WT1400_genome"],
+        gtf=config["WT1400_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/WT1400_star_index/",
+        cluster= '-p hmem -J WT1400_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/WT1400_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule WTLS54_starIndex:
+    input:
+        genome_fasta=config["WTLS54_genome"],
+        gtf=config["WTLS54_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/WTLS54_star_index/",
+        cluster= '-p hmem -J WTLS54_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/WTLS54_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule AClong_starIndex:
+    input:
+        genome_fasta=config["AC_LONG_genome"],
+        gtf=config["AC_LONG_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/AC_LONG_star_index/",
+        cluster= '-p hmem -J AC_LONG_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/AC_LONG_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule WTlong_starIndex:
+    input:
+        genome_fasta=config["WT_LONG_genome"],
+        gtf=config["WT_LONG_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/WT_LONG_star_index/",
+        cluster= '-p hmem -J WT_LONG_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/WT_LONG_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule ACactin_starIndex:
+    input:
+        genome_fasta=config["AC_actin_genome"],
+        gtf=config["AC_actin_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/AC_actin_star_index/",
+        cluster= '-p hmem -J AC_actin_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/AC_actin_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule ACactin_ext20_starIndex:
+    input:
+        genome_fasta=config["ACT1_AC_ext20_genome"],
+        gtf=config["ACT1_AC_ext20_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/AC_actin_ext20_star_index/",
+        cluster= '-p hmem -J AC_actin_ext20_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/AC_actin_ext20_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule ACactin_ext40_starIndex:
+    input:
+        genome_fasta=config["ACT1_AC_ext40_substrate_genome"],
+        gtf=config["ACT1_AC_ext40_substrate_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/AC_actin_ext40_star_index/",
+        cluster= '-p hmem -J AC_actin_ext40_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/AC_actin_ext40_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule ACactin_extSL_starIndex:
+    input:
+        genome_fasta=config["ACT1_AC_extSL_substrate_genome"],
+        gtf=config["ACT1_AC_extSL_substrate_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/AC_actin_extSL_star_index/",
+        cluster= '-p hmem -J AC_actin_extSL_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/AC_actin_extSL_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule WTactin_starIndex:
+    input:
+        genome_fasta=config["WT_actin_genome"],
+        gtf=config["WT_actin_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/WT_actin_star_index/",
+        cluster= '-p hmem -J WT_actin_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/WT_actin_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule DGLong_starIndex:
+    input:
+        genome_fasta=config["DG_LONG_genome"],
+        gtf=config["DG_LONG_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/DGLong_star_index/",
+        cluster= '-p hmem -J DGLong_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/DGLong_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule ACT1_dGstarIndex:
+    input:
+        genome_fasta=config["ACT1_dG_genome"],
+        gtf=config["ACT1_dG_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/ACT1_dG_star_index/",
+        cluster= '-p hmem -J ACT1_dG_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/ACT1_dG_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule ACT1_MS2starIndex:
+    input:
+        genome_fasta=config["ACT1_3xMS2_genome"],
+        gtf=config["ACT1_3xMS2_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/ACT1_MS2_star_index/",
+        cluster= '-p hmem -J ACT1_MS2_star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/ACT1_MS2_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 4 \
+        --sjdbOverhang 49
+        """
+
+rule getAllReadlengths:
+    input:
+        "results/trim_galore/{sample}_trimmed.fq.gz"
+    output:
+        "results/lengths/{sample}.all_read_lengths.tsv"
+    params:
+        sample="{sample}",
+        deduped="results/lengths/{sample}.deduped.fa",
+        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00"
+    shell:
+        """
+        zcat {input} | fastx_collapser > {params.deduped}
+        cat {params.deduped} | awk '{{if(NR%4==2) print "read_x\\t" length($1) "\\tread\\t{params.sample}\\tall_reads"}}' > {output}
+        rm {params.deduped}
+        """
+
+# # Note:  --alignSJoverhangMin 1000 prevents STAR
+# # from creating novel splice junctions. --outFilterMismatchNmax 2 means we allow a maximum
+# # of 2 mismatches. --seedSearchStartLmax 16 means that the read is split into more seeds
+# # resulting potentially in a more sensitive search better for shorter reads - got this
+# # parameter from a post about ribosome profiling
+
+
+rule mapReads:
+    input:
+        fastq="results/trim_galore/{sample}_trimmed.fq.gz",
+        msg1="results/AC_star_index/exonInfo.tab",
+        msg2="results/DG_star_index/exonInfo.tab",
+        msg3="results/WT1400_star_index/exonInfo.tab",
+        msg4="results/WTLS54_star_index/exonInfo.tab",
+        msg5="results/AC_LONG_star_index/exonInfo.tab",
+        msg6="results/WT_LONG_star_index/exonInfo.tab",
+        msg7="results/AC_actin_star_index/exonInfo.tab",
+        msg8="results/WT_actin_star_index/exonInfo.tab",
+        msg9="results/DGLong_star_index/exonInfo.tab",
+        msg10="results/AC_actin_ext20_star_index/exonInfo.tab",
+        msg11="results/AC_actin_ext40_star_index/exonInfo.tab",
+        msg12="results/AC_actin_extSL_star_index/exonInfo.tab",
+        msg13="results/ACT1_dG_star_index/exonInfo.tab",
+        msg14="results/ACT1_MS2_star_index/exonInfo.tab",
+    output:
+        sam="results/mapped/{sample}.Aligned.out.sam",
+        logfolder="results/logs/{sample}.Log.final.out",
+        unmapped_reads="results/mapped/{sample}.Unmapped.out.mate1"
+    params:
+        log="results/mapped/{sample}.Log.final.out",
+        outprefix="results/mapped/{sample}.",
+        cluster= '-p compute -J star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 8GB -c 8',
+        stindex = lambda wildcards: config["samples"][wildcards.sample][1]
+    threads:
+        8
+    run:
+        shell("echo {params.stindex}")
+        if str(params['stindex']) == "AC_substrate":
+            star_index="results/AC_star_index"
+        elif str(params['stindex']) == "DG_substrate":
+            star_index="results/DG_star_index"
+        elif str(params['stindex']) == "WT_1400_substrate":
+            star_index="results/WT1400_star_index"
+        elif str(params['stindex']) == "WT_LS54_substrate":
+            star_index="results/WTLS54_star_index"
+        elif str(params['stindex']) == "AC_LONG_substrate":
+            star_index="results/AC_LONG_star_index"
+        elif str(params['stindex']) == "WT_LONG_substrate":
+            star_index="results/WT_LONG_star_index"
+        elif str(params['stindex']) == "WT_actin_substrate":
+            star_index="results/WT_actin_star_index"
+        elif str(params['stindex']) == "AC_actin_substrate":
+            star_index="results/AC_actin_star_index"
+        elif str(params['stindex']) == "dG_UBC4_long_substrate":
+            star_index="results/DGLong_star_index"
+        elif str(params['stindex']) == "ACT1_AC_ext20_substrate":
+            star_index="results/AC_actin_ext20_star_index"
+        elif str(params['stindex']) == "ACT1_AC_ext40_substrate":
+            star_index="results/AC_actin_ext40_star_index"
+        elif str(params['stindex']) == "ACT1_AC_extSL_substrate":
+            star_index="results/AC_actin_extSL_star_index"
+        elif str(params['stindex']) == "ACT1_3xMS2_substrate":
+            star_index="results/ACT1_MS2_star_index"
+        elif str(params['stindex']) == "ACT1_dG_substrate":
+            star_index="results/ACT1_dG_star_index"
+        shell("STAR --runThreadN {threads} \
+        --genomeDir {star_index} \
+        --readFilesIn {input.fastq}  --readFilesCommand zcat \
+        --outFileNamePrefix {params.outprefix} --genomeLoad NoSharedMemory \
+        --outFilterMultimapNmax 1 --outFilterMultimapScoreRange 1 \
+        --outSAMattributes All --outFilterType BySJout --outFilterScoreMin 10 --alignEndsType EndToEnd \
+        --outFilterMismatchNmax 2 --alignSJoverhangMin 1000 \
+        --outReadsUnmapped Fastx --seedSearchStartLmax 16")
+        shell("mv {params.log} {output.logfolder}")
+
+
+rule seperateFandR: # We need to salvage the reads that mapped to the reverse strand of the substrate-ome because otherwise these are just lost and not mapped to the genome
+    input:
+        mapped_sam="results/mapped/{sample}.Aligned.out.sam",
+        unmapped_fastq="results/mapped/{sample}.Unmapped.out.mate1"
+    output:
+        justForward_bam_sorted="results/mapped/{sample}.Aligned.out.forward.sorted.bam",
+        minusmerged_fastq="results/mapped/{sample}.Unmapped.alsorev.fq",
+        justForward_bam_index="results/mapped/{sample}.Aligned.out.forward.sorted.bam.bai"
+    params:
+        justForward_bam="results/mapped/{sample}.Aligned.out.forward.bam",
+        justReverse_bam="results/mapped/{sample}.Aligned.out.reverse.bam",
+        tempfastq="results/mapped/{sample}.temp.fq",
+        cluster= '-p compute -J seperateFandR  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 8GB -c 8'
+    threads:
+        8
+    shell:
+        """
+        echo "Select reads that mapped in the correct orientation"
+        sambamba view -t {threads} -S -f bam -F "not reverse_strand" {input.mapped_sam} -o {params.justForward_bam}
+        sambamba sort -t {threads} {params.justForward_bam} -o {output.justForward_bam_sorted}
+        sambamba index -t {threads} {output.justForward_bam_sorted} {output.justForward_bam_index}
+
+        echo "Get reads that did not"
+        sambamba view -t {threads} -S -f bam -F "reverse_strand" {input.mapped_sam} -o {params.justReverse_bam}
+
+        echo "Convert to FASTQ"
+        bedtools bamtofastq -i {params.justReverse_bam} -fq {params.tempfastq}
+
+        echo "Merge with unmapped FASTQ from STAR substrate-ome mapping"
+        cat {params.tempfastq} {input.unmapped_fastq} > {output.minusmerged_fastq}
+
+        # Get rid of intermediate Files
+        rm {params.justForward_bam}
+        rm {params.justReverse_bam}
+        rm {params.tempfastq}
+        rm {input.mapped_sam}
+        rm {input.unmapped_fastq}
+        """
+
+# Note: We only take the forward strand at this stage, this is overkill because we just sorted that out.
+
+rule getCDNAcounts:
+    input:
+        "results/mapped/{sample}.Aligned.out.forward.sorted.bam"
+    output:
+        bed="results/xlsites/{sample}.small.Aligned.out.sorted.bed",
+        cDNAbed="results/xlsites/{sample}.small.cDNA.nosplices.bed",
+        cdnacounts="results/xlsites/{sample}.small.Aligned.out.sorted.cdnacounts",
+        bedgraph="results/xlsites/{sample}.small.bedgraph",
+        temp1="results/lengths/{sample}.temp1.sub.bam"
+    params:
+        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00",
+        temp2="results/lengths/{sample}.temp2.bed"
+    shell:
+        """
+        samtools view -h {input} | awk '{{if($0 ~ /^@/ || $6 !~ /N/) {{print $0}}}}' | samtools view -Sb > {output.temp1}
+        bedtools bamtobed -i {input} > {output.bed}
+        bedtools bamtobed -i {output.temp1} > {params.temp2}
+        Rscript --vanilla scripts/getcDNAcounts.R {output.bed} {output.cdnacounts}
+        Rscript --vanilla scripts/getcDNABed.R {params.temp2} {output.cDNAbed}
+        cut -f1,2,3,5 {output.cdnacounts} > {output.bedgraph}
+        sed -i '1 i\ track type=bedGraph' {output.bedgraph}
+        rm {params.temp2}
+        """
+
+# Get de-duplicated bam files to do mutation analysis
+rule getDeDupedBam:
+    input:
+        bam="results/mapped/{sample}.Aligned.out.forward.sorted.bam"
+    output:
+        dedupe_bam="results/mapped/{sample}.Aligned.out.sorted.DEDUPLICATED.bam",
+        dedupe_bam_index="results/mapped/{sample}.Aligned.out.sorted.DEDUPLICATED.bam.bai"
+    params:
+        cluster="-N 1 -c 1 --mem=32G -t 2:00:00"
+    shell:
+        """
+        python scripts/removeDuplicatesFromBam.py {input.bam} {output.dedupe_bam}
+        samtools index {output.dedupe_bam}
+        """
+
+
+# Get the read lengths of the reads and cDNAs that have singly mapped to the substrate
+
+rule getLengths:
+    input:
+        bam="results/lengths/{sample}.temp1.sub.bam",
+        cDNA="results/xlsites/{sample}.small.cDNA.nosplices.bed"
+    output:
+        lengths="results/lengths/{sample}.smallRNA_lengths.tsv"
+    params:
+        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00",
+        bamtemp="results/lengths/{sample}.bamtemp_lengths.tsv",
+        cDNAtemp="results/lengths/{sample}.cDNAtemp_lengths.tsv",
+        sample="{sample}"
+    shell:
+        """
+        samtools view -F 4 -q 255 {input.bam} | awk '{{print $1 "\\t" length($10) "\\tread\\t{params.sample}\\tsubstrate_ome"}}' | sort -u > {params.bamtemp}
+        awk '{{print $4 "\\t" $3-$2 "\\tcDNA\\t{params.sample}\\tsubstrate_ome"}}' {input.cDNA} | sort -u > {params.cDNAtemp}
+        cat {params.bamtemp} {params.cDNAtemp} > {output.lengths}
+        rm {params.bamtemp} {params.cDNAtemp} {input.bam}
+        """
+
+# ##########################################################################################
+# # Now we repeat the process with some slight differences to map the unmapped reads to the
+# # yeast genome
+# ###########################################################################################
+
+rule genomeSTARindex:
+    input:
+        genome_fasta=config["yeast_genome"],
+        gtf=config["yeast_gtf_file"]
+    threads:
+        8
+    params:
+        outdir="results/genome_star_index/",
+        cluster= '-p hmem -J star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 16GB -c 8'
+    output:
+        index="results/genome_star_index/exonInfo.tab"
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --runMode genomeGenerate --genomeDir {params.outdir} \
+        --genomeFastaFiles {input.genome_fasta} --sjdbGTFfile {input.gtf} \
+        --outFileNamePrefix {params.outdir} --genomeSAindexNbases 10\
+        --sjdbOverhang 49
+        """
+
+# # Note: these parameters are different to the first step. We allow novel splice junctions in this step,
+# # under the assumption that
+# # introns in the S.cerevisiae genome may not be fully annotated.
+# # --outFilterMismatchNmax 2 means we allow a maximum
+# # of 2 mismatches.
+
+rule genomeMapreads:
+    input:
+        fastq="results/mapped/{sample}.Unmapped.alsorev.fq",
+        message="results/genome_star_index/exonInfo.tab"
+    output:
+        sam="results/genome_mapped/{sample}.Aligned.sortedByCoord.out.bam",
+        logfolder="results/logs/{sample}.genome_mapped.Log.final.out"
+    params:
+        star_index="results/genome_star_index",
+        log="results/genome_mapped/{sample}.Log.final.out",
+        outprefix="results/genome_mapped/{sample}.",
+        cluster= '-p compute -J star_index  --part=cpu -t 1:00:00 -n 1 --mem-per-cpu 8GB -c 8'
+    threads:
+        8
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --genomeDir {params.star_index} \
+        --readFilesIn {input.fastq} \
+        --outFileNamePrefix {params.outprefix} \
+        --outFilterMultimapNmax 1 --outFilterMultimapScoreRange 1 --outReadsUnmapped Fastx \
+        --outSAMattributes All --outFilterType BySJout --outFilterScoreMin 10 --alignEndsType EndToEnd \
+        --outFilterMismatchNmax 2 --twopassMode Basic --outSAMtype BAM SortedByCoordinate
+        mv {params.log} {output.logfolder}
+        """
+
+rule getUnmappedReadlengths:
+    input:
+        "results/genome_mapped/{sample}.Unmapped.out.mate1"
+    output:
+        "results/lengths/{sample}.unmapped_read_lengths.tsv"
+    params:
+        sample="{sample}",
+        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00"
+    shell:
+        """
+        cat {input} | awk '{{if(NR%4==2) print "read_x\\t" length($1) "\\tread\\t{params.sample}\\tunmapped_reads"}}' > {output}
+        """
+
+# The awk command is to remove spliced reads from one file because this messes up counting the length of the 
+# singly mapped cDNAs.
+
+rule getgenomeCDNAcounts:
+    input:
+        "results/genome_mapped/{sample}.Aligned.sortedByCoord.out.bam"
+    output:
+        bed="results/genome_xlsites/{sample}.Aligned.out.sorted.bed",
+        cDNAbed="results/genome_xlsites/{sample}.cDNA.nosplices.bed",
+        cdnacounts="results/genome_xlsites/{sample}.Aligned.out.sorted.cdnacounts",
+        temp1="results/lengths/{sample}.temp1.bam"
+    params:
+        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00",
+        temp2="results/lengths/{sample}.temp2.bed"
+    shell:
+        """
+        samtools view -h {input} | awk '{{if($0 ~ /^@/ || $6 !~ /N/) {{print $0}}}}' | samtools view -Sb > {output.temp1}
+        bedtools bamtobed -i {input} > {output.bed}
+        bedtools bamtobed -i {output.temp1} > {params.temp2}
+        Rscript --vanilla scripts/getcDNAcounts.R {output.bed} {output.cdnacounts}
+        Rscript --vanilla scripts/getcDNABed.R {params.temp2} {output.cDNAbed}
+        rm {params.temp2}
+        """
+
+rule getGenomeLengths:
+    input:
+        bam="results/lengths/{sample}.temp1.bam",
+        cDNA="results/genome_xlsites/{sample}.cDNA.nosplices.bed"
+    output:
+        lengths="results/lengths/{sample}.genomicRNA_lengths.tsv"
+    params:
+        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00",
+        
+        bamtemp="results/lengths/{sample}.genbamtemp_lengths.tsv",
+        cDNAtemp="results/lengths/{sample}.gencDNAtemp_lengths.tsv",
+        sample="{sample}"
+    shell:
+        """
+        samtools view -F 4 -q 255 {input.bam} | awk '{{print $1 "\\t" length($10) "\\tread\\t{params.sample}\\tgenome"}}' | sort -u > {params.bamtemp}
+        awk '{{print $4 "\\t" $3-$2 "\\tcDNA\\t{params.sample}\\tgenome"}}' {input.cDNA} | sort -u > {params.cDNAtemp}
+        cat {params.bamtemp} {params.cDNAtemp} > {output.lengths}
+        rm {params.bamtemp} {params.cDNAtemp} {input.bam}
+        """
+
+rule mergeLengths:
+    input:
+        small_lengths="results/lengths/{sample}.smallRNA_lengths.tsv",
+        genome_lengths="results/lengths/{sample}.genomicRNA_lengths.tsv",
+        all_reads="results/lengths/{sample}.all_read_lengths.tsv",
+        unmapped_reads="results/lengths/{sample}.unmapped_read_lengths.tsv"
+    output:
+        lengths="results/lengths/{sample}.lengths.tsv"
+    params:
+        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00"
+    shell:
+        """
+        cat {input.small_lengths} {input.genome_lengths} {input.all_reads} {input.unmapped_reads} > {output.lengths}
+        rm {input.small_lengths} {input.genome_lengths} {input.all_reads} {input.unmapped_reads}
+        """
+
+# Merge cDNA files to get total cDNA number
+# Also, merge raw xlsites files to get total uniquely mapped read number
+
+rule getMerged:
+    input:
+        substrate_cdna="results/xlsites/{sample}.small.Aligned.out.sorted.cdnacounts",
+        genome_cdna="results/genome_xlsites/{sample}.Aligned.out.sorted.cdnacounts",
+        substrate_reads="results/xlsites/{sample}.small.Aligned.out.sorted.bed",
+        genome_reads="results/genome_xlsites/{sample}.Aligned.out.sorted.bed"
+    output:
+        merged_cdna="results/merged/{sample}.cdnacounts",
+        merged_reads="results/merged/{sample}.bed"
+    params:
+        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00"
+    shell:
+        """
+        cat {input.substrate_cdna} {input.genome_cdna} > {output.merged_cdna}
+        cat {input.substrate_reads} {input.genome_reads} > {output.merged_reads}
+        """
+
+# PhiX mapping to check for contamination
+rule mapPhi:
+    input:
+        fastq="results/genome_mapped/{sample}.Unmapped.out.mate1"
+    output:
+        sam="results/phiX_mapped/{sample}.Aligned.out.sam",
+        logfolder="results/logs/{sample}.phiX_mapped.Log.final.out"
+    params:
+        star_index="/home/camp/capitac/working/charlotte/lisa_invitro_splicing/phiX_genome",
+        log="results/phiX_mapped/{sample}.Log.final.out",
+        outprefix="results/phiX_mapped/{sample}.",
+        cluster= '-N 1 -c 8 --mem=64G --part=cpu -t 1:00:00'
+    threads:
+        8
+    shell:
+        """
+        STAR --runThreadN {threads} \
+        --genomeDir {params.star_index} \
+        --readFilesIn {input.fastq} \
+        --outFileNamePrefix {params.outprefix} --limitBAMsortRAM 6000000000 \
+        --outFilterMultimapNmax 1 --outFilterMultimapScoreRange 1 --outReadsUnmapped Fastx \
+        --outFilterType BySJout --outFilterScoreMin 10 \
+        --outFilterMismatchNmax 2 
+        mv {params.log} {output.logfolder}
+        """
