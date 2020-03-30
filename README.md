@@ -12,7 +12,7 @@ Alternatively, ensure you have the packages in psiclip_environment.yml installed
 ## Pre-processing
 Mapping of demultiplexed fastq files and processing to crosslink sites is performed by a Snakemake workflow. This consists of a Snakefile and config.yaml. The chunks of code are contained in the Snakefile and the sample annotations are in the config.yaml. 
 #### I want to reproduce the paper
-*Note: This analysis has been tested and optimised for a SLURM computing cluster. The files are small enough that the analysis could feasibly run on a laptop. In which case the command to run Snakemake should be altered to remove the `--cluster` flag. For alternative cluster architectures, the cluster paramater for each step would be need to be changed to the correct format. *
+*Note: This analysis has been tested and optimised for a SLURM computing cluster. The files are small enough that the analysis could feasibly run on a laptop. In which case the command to run Snakemake should be altered to remove the* `--cluster` *flag. For alternative cluster architectures, the cluster paramater for each step would be need to be changed to the correct format. *
 1. Ensure you have dependencies installed as detailed above.
 2. Clone this repository and run `./RUN-ME-for-preprocessing.sh`. This script will download the raw fastq files from Array Express and the metadata information and then run the Snakemake pipeline.
 #### I want to modify the code for new substrates or samples
