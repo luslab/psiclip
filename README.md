@@ -3,6 +3,11 @@ Scripts for the pre-processing and figures from "PsiCLIP reveals the arrangement
 In order to replicate this analysis you will also need to download the starting files from Array Express: E-MATB-XXXXXXXXX
 
 ## Dependencies
+To install everything you need to run this code I recommend creating a conda environment.
+```
+conda env create -f psiclip_environment.yml
+```
+Alternatively, ensure you have the packages in psiclip_environment.yml installed.
 
 ## Pre-processing
 Mapping of demultiplexed fastq files and processing to crosslink sites is performed by a Snakemake workflow. This consists of a Snakefile and config.yaml. The chunks of code are contained in the Snakefile and the sample annotations are in the config.yaml. 
