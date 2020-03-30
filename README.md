@@ -11,6 +11,7 @@ Alternatively, ensure you have the packages in psiclip_environment.yml installed
 
 ## Pre-processing
 Mapping of demultiplexed fastq files and processing to crosslink sites is performed by a Snakemake workflow. This consists of a Snakefile and config.yaml. The chunks of code are contained in the Snakefile and the sample annotations are in the config.yaml. 
+### Modifying the code for new substrates or samples
 In order to modify this code for new samples, you will need to annotate them as we have for our samples in the config.yaml. If you are using a different pre-mRNA substrate you will need a fasta file with your substrate and the snRNAs to map against and an annotation file with the intron position. You can copy the format we have used for our different substrates. The final step for adding a new substrate is to add a new rule in the Snakemake workflow to generate the index for your substrate, and add a new line to the mapping rule, such that it will know to check for your new substrate. The format is straightforward to copy from the substrates available already.
 Note that post-"substratome" mapping is done to the yeast genome in this script, but this could be modified if your sample was in human extract for example.
 
