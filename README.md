@@ -1,5 +1,5 @@
 # psiCLIP
-Scripts for the pre-processing and figures from "PsiCLIP reveals the arrangement of DEAH-box helicases before and after exon ligation". The data from this paper is accessible from Array Express: E-MATB-8895.
+Scripts for the pre-processing and figures from "[PsiCLIP reveals dynamic RNA binding by DEAH-box helicases before and after exon ligation](https://www.biorxiv.org/content/10.1101/2020.03.15.992701v1.abstract)". The data for this paper is accessible from Array Express: E-MTAB-8895. 
 
 ## Dependencies
 To install everything you need to run this code I recommend creating a conda environment.
