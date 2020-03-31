@@ -11,7 +11,7 @@ library(cowplot)
 cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
           "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
-annot=fread("prp16_ext_metadata.csv")
+annot=fread("metadata/fig4_samples.csv")
 
 # get genomic xlsites
 fls = basename(annot[[1]]) %>% gsub(".small.Aligned.out.sorted.cdnacounts",".Aligned.out.sorted.cdnacounts",.)
