@@ -23,4 +23,5 @@ dependencies:
   - r-lemon
   - r-scales
   - r-forcats
+  - snakemake
   
