@@ -37,7 +37,7 @@ read_annotation_files <- function(mfiles) {
 
 # read in data
 ```{r}
-dir = "../../results/merged" #"m6A_WT_miCLIP" #
+dir = "../results/merged" #"m6A_WT_miCLIP" #
 searchpat = "cdnacounts" #"mergedClusterCoverage.50.bed"#
 mfiles = list.files(path=dir, pattern=searchpat, full.names=TRUE)
 mfiles <- mfiles[grepl("exp8|exp21|exp4_8", mfiles) & !grepl("PRP16", mfiles)]
@@ -129,7 +129,7 @@ ggsave(a, filename = "bar_graphs_percent.pdf", width=5, height=12)
 
 ```{r}
 # Read in all data 
-dir = "../../results/merged" #"m6A_WT_miCLIP" #
+dir = "../results/merged" #"m6A_WT_miCLIP" #
 searchpat = "cdnacounts" #"mergedClusterCoverage.50.bed"#
 mfiles = list.files(path=dir, pattern=searchpat, full.names=TRUE)
 
@@ -171,4 +171,3 @@ ex8 = df_U %>% filter(sample == "SMB1_FLAG_His_UBC4_AC_short_exp8" | sample == "
 ggplot(ex8, aes(x=sample,y=total,fill=V1)) + geom_bar(stat="identity", position="fill") + theme_few() + coord_flip()
 ggsave("smb1_library_distribution.pdf", width=8,height=3)
 ```
-

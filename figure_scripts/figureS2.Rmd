@@ -12,21 +12,21 @@ library(data.table)
 Need to generate basecounts files first. For this I used bam-readcount. 
 
 ```{bash}
-bam-readcount -f ../custom_genome/WT_actin.fa ../results/mapped/Prp16_FLAG_ACT1_WT_exp31.Aligned.out.sorted.DEDUPLICATED.bam WT_actin > Prp16_FLAG_ACT1_WT_exp31.noDBR1basecounts.txt
+bam-readcount -f ../pre_processing/substrate-omes/WT_actin.fa ../pre_processing/results/mapped/Prp16_FLAG_ACT1_WT_exp31.Aligned.out.sorted.DEDUPLICATED.bam WT_actin > Prp16_FLAG_ACT1_WT_exp31.noDBR1basecounts.txt
 
-bam-readcount -f ../custom_genome/WT_actin.fa ../results/mapped/Prp16_G378A-FLAG_ACT1_WT_exp31.Aligned.out.sorted.DEDUPLICATED.bam WT_actin > Prp16_G378A-FLAG_ACT1_WT_exp31.noDBR1basecounts.txt
+bam-readcount -f ../pre_processing/substrate-omes/WT_actin.fa ../pre_processing/results/mapped/Prp16_G378A-FLAG_ACT1_WT_exp31.Aligned.out.sorted.DEDUPLICATED.bam WT_actin > Prp16_G378A-FLAG_ACT1_WT_exp31.noDBR1basecounts.txt
 
-bam-readcount -f ../custom_genome/WT_long_ome.fa ../results/mapped/Prp16_FLAG_UBC4_WT_long_exp30.Aligned.out.sorted.DEDUPLICATED.bam WT_long > Prp16_FLAG_UBC4_WT_long_exp30.noDBR1basecounts.txt
+bam-readcount -f ../pre_processing/substrate-omes/WT_long_ome.fa ../pre_processing/results/mapped/Prp16_FLAG_UBC4_WT_long_exp30.Aligned.out.sorted.DEDUPLICATED.bam WT_long > Prp16_FLAG_UBC4_WT_long_exp30.noDBR1basecounts.txt
 
-bam-readcount -f ../custom_genome/WT_long_ome.fa ../results/mapped/Prp16_G378A_FLAG_UBC4_WT_long_exp30.Aligned.out.sorted.DEDUPLICATED.bam WT_long > Prp16_G378A_FLAG_UBC4_WT_long_exp30.noDBR1basecounts.txt 
+bam-readcount -f ../pre_processing/substrate-omes/WT_long_ome.fa ../pre_processing/results/mapped/Prp16_G378A_FLAG_UBC4_WT_long_exp30.Aligned.out.sorted.DEDUPLICATED.bam WT_long > Prp16_G378A_FLAG_UBC4_WT_long_exp30.noDBR1basecounts.txt 
 
-bam-readcount -f ../custom_genome/WT_actin.fa ../results/mapped/Prp16_FLAG_ACT1_WT_DBR1_exp32.Aligned.out.sorted.DEDUPLICATED.bam WT_actin > Prp16_FLAG_ACT1_WT_exp32.DBR1basecounts.txt
+bam-readcount -f ../pre_processing/substrate-omes/WT_actin.fa ../pre_processing/results/mapped/Prp16_FLAG_ACT1_WT_DBR1_exp32.Aligned.out.sorted.DEDUPLICATED.bam WT_actin > Prp16_FLAG_ACT1_WT_exp32.DBR1basecounts.txt
 
-bam-readcount -f ../custom_genome/WT_actin.fa ../results/mapped/Prp16_G378A-FLAG_ACT1_WT_DBR1_exp32.Aligned.out.sorted.DEDUPLICATED.bam WT_actin > Prp16_G378A-FLAG_ACT1_WT_exp32.DBR1basecounts.txt
+bam-readcount -f ../pre_processing/substrate-omes/WT_actin.fa ../pre_processing/results/mapped/Prp16_G378A-FLAG_ACT1_WT_DBR1_exp32.Aligned.out.sorted.DEDUPLICATED.bam WT_actin > Prp16_G378A-FLAG_ACT1_WT_exp32.DBR1basecounts.txt
 
-bam-readcount -f ../custom_genome/WT_long_ome.fa ../results/mapped/Prp16-FLAG_UBC4_WT_long_DBR1_exp24.Aligned.out.sorted.DEDUPLICATED.bam WT_long > Prp16-FLAG_UBC4_WT_long_DBR1_exp24.DBR1basecounts.txt
+bam-readcount -f ../pre_processing/substrate-omes/WT_long_ome.fa ../pre_processing/results/mapped/Prp16-FLAG_UBC4_WT_long_DBR1_exp24.Aligned.out.sorted.DEDUPLICATED.bam WT_long > Prp16-FLAG_UBC4_WT_long_DBR1_exp24.DBR1basecounts.txt
 
-bam-readcount -f ../custom_genome/WT_long_ome.fa ../results/mapped/Prp16-G378A-FLAG_UBC4_WT_long_DBR1_exp24.Aligned.out.sorted.DEDUPLICATED.bam WT_long > Prp16-G378A-FLAG_UBC4_WT_long_DBR1_exp24.DBR1basecounts.txt
+bam-readcount -f ../pre_processing/substrate-omes/WT_long_ome.fa ../pre_processing/results/mapped/Prp16-G378A-FLAG_UBC4_WT_long_DBR1_exp24.Aligned.out.sorted.DEDUPLICATED.bam WT_long > Prp16-G378A-FLAG_UBC4_WT_long_DBR1_exp24.DBR1basecounts.txt
 
 echo "done"
 ```
