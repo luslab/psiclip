@@ -34,6 +34,7 @@ source activate psiclip
 echo "Step 4 completed: Created & activated psiclip conda environment"
 
 # Step 5. Run the Snakemake
+cd pre_processing
 snakemake -k --cluster 'sbatch {params.cluster}' --jobs 200 --latency-wait 60 --rerun-incomplete
 
 # Step 6. exit the environment
