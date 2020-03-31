@@ -1,441 +1,160 @@
-# Define pipeline path
-datapath: /home/camp/capitac/working/charlotte/lisa_invitro_splicing/
-
 # Define samples
 samples:
-# Experiment 1 PRP16
-    noUV_PRP16_G378A_FLAG_exp1: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_PRP16_G378A_FLAG_His_yeast_IRL3_exp1.fq.gz", "AC_substrate"]
-    noUV_no_FLAGed_protein_exp1: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_yeast_no_FLAGed_protein_no_UV_IRL3_exp1.fq.gz", "AC_substrate"]
-    noUV_PRP16_FLAG_exp1: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_PRP16_FLAG_His_yeast_IRL3_exp1.fq.gz", "AC_substrate"]
-    ctrl_no_FLAGed_protein_UV_exp1: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/ctrl_yeast_no_FLAGed_protein_UV_IRL3_exp1.fq.gz", "AC_substrate"]
-    PRP16_G378A_FLAG_exp1: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/PRP16_G378A_FLAG_His_yeast_IRL3_exp1.fq.gz", "AC_substrate"]
-    PRP16_FLAG_exp1: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/PRP16_FLAG_His_yeast_IRL3_exp1.fq.gz", "AC_substrate"]
+    ctrl_no_FLAGed_protein_UV_ACT1_AC_exp21: ["data/fastq/ERR3988022.fq.gz", "AC_actin_substrate"]
+    ctrl_no_FLAGed_protein_UV_UBC4_AC_long_exp15: ["data/fastq/ERR3988023.fq.gz", "AC_LONG_substrate"]
+    ctrl_no_FLAGed_protein_UV_UBC4_AC_short_exp4_8: ["data/fastq/ERR3988024.fq.gz", "AC_substrate"]
+    ctrl_no_FLAGed_protein_UV_UBC4_WT_long_exp16: ["data/fastq/ERR3988025.fq.gz", "WT_LONG_substrate"]
+    ctrl_notag_Prp16_G378A_ACT1_WText20_DBR1_exp33: ["data/fastq/ERR3988026.fq.gz", "ACT1_AC_ext20_substrate"]
+    ctrl_notag_Prp16_G378A_ACT1_WText20_DBR1_exp43: ["data/fastq/ERR3988027.fq.gz", "ACT1_AC_ext20_substrate"]
+    ctrl_notag_Prp16_G378A_ACT1_WText40_DBR1_exp34: ["data/fastq/ERR3988028.fq.gz", "ACT1_AC_ext40_substrate"]
+    ctrl_notag_Prp16_G378A_ACT1_WText40_DBR1_exp45: ["data/fastq/ERR3988029.fq.gz", "ACT1_AC_ext40_substrate"]
+    ctrl_notag_Prp16_G378A_ACT1_WTextSL_DBR1_exp35: ["data/fastq/ERR3988030.fq.gz", "ACT1_AC_extSL_substrate"]
+    ctrl_notag_Prp16_G378A_ACT1_WTextSL_DBR1_exp44: ["data/fastq/ERR3988031.fq.gz", "ACT1_AC_extSL_substrate"]
+    ctrl_notag_Prp16_G378A_UBC4_AC_long_DBR1_exp23: ["data/fastq/ERR3988032.fq.gz", "AC_LONG_substrate"]
+    ctrl_notag_Prp16_G378A_UBC4_WT_long_DBR1_exp24: ["data/fastq/ERR3988033.fq.gz", "WT_LONG_substrate"]
+    ctrl_notag_Prp16_G378A_UV_UBC4_AC_long_exp30: ["data/fastq/ERR3988034.fq.gz", "AC_LONG_substrate"]
+    ctrl_notag_Prp16_G378A_UV_UBC4_WT_long_exp30: ["data/fastq/ERR3988035.fq.gz", "WT_LONG_substrate"]
+    ctrl_notag_Prp22_K512A_UBC4_dG_long_DBR1_exp37: ["data/fastq/ERR3988036.fq.gz", "dG_UBC4_long_substrate"]
+    ctrl_notag_Prp22_K512A_UBC4_dG_long_DBR1_exp38: ["data/fastq/ERR3988037.fq.gz", "dG_UBC4_long_substrate"]
+    ctrl_notag_Prp22_K512A_UBC4_WT54_DBR1_exp36: ["data/fastq/ERR3988038.fq.gz", "WT_LS54_substrate"]
+    ctrl_notag_Prp22_K512A_UV_UBC4_WT54_exp28: ["data/fastq/ERR3988039.fq.gz", "WT_LS54_substrate"]
+    ctrl_notag_UBC4_AC_long_DBR1_exp23: ["data/fastq/ERR3988040.fq.gz", "AC_LONG_substrate"]
+    ctrl_notag_UBC4_dG_long_DBR1_exp37: ["data/fastq/ERR3988041.fq.gz", "dG_UBC4_long_substrate"]
+    ctrl_notag_UBC4_dG_long_DBR1_exp38: ["data/fastq/ERR3988042.fq.gz", "dG_UBC4_long_substrate"]
+    ctrl_notag_UV_ACT1_AC_exp29: ["data/fastq/ERR3988043.fq.gz", "AC_actin_substrate"]
+    ctrl_notag_UV_ACT1_AC_Prp16_DBR1_exp32: ["data/fastq/ERR3988044.fq.gz", "AC_actin_substrate"]
+    ctrl_notag_UV_ACT1_AC_Prp16_exp31: ["data/fastq/ERR3988045.fq.gz", "AC_actin_substrate"]
+    ctrl_notag_UV_ACT1_AC_Prp16_G378A_DBR1_exp32: ["data/fastq/ERR3988046.fq.gz", "AC_actin_substrate"]
+    ctrl_notag_UV_ACT1_AC_Prp16_G378A_exp29: ["data/fastq/ERR3988047.fq.gz", "AC_actin_substrate"]
+    ctrl_notag_UV_ACT1_AC_Prp16_G378A_exp31: ["data/fastq/ERR3988048.fq.gz", "AC_actin_substrate"]
+    ctrl_notag_UV_ACT1_WT_Prp16_G378A_DBR1_exp32: ["data/fastq/ERR3988049.fq.gz", "WT_actin_substrate"]
+    ctrl_notag_UV_ACT1_WT_Prp16_G378A_exp29: ["data/fastq/ERR3988050.fq.gz", "WT_actin_substrate"]
+    ctrl_notag_UV_ACT1_WT_Prp16_G378A_exp31: ["data/fastq/ERR3988051.fq.gz", "WT_actin_substrate"]
+    ctrl_notag_UV_UBC4_AC_long_exp30: ["data/fastq/ERR3988052.fq.gz", "AC_LONG_substrate"]
+    ctrl_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_exp_40: ["data/fastq/ERR3988053.fq.gz", "ACT1_3xMS2_substrate"]
+    ctrl_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_exp_42: ["data/fastq/ERR3988054.fq.gz", "ACT1_3xMS2_substrate"]
+    ctrl_yeast_ACT1_dG_Prp22_DBR1_exp39: ["data/fastq/ERR3988055.fq.gz", "ACT1_dG_substrate"]
+    ctrl_yeast_ACT1_dG_Prp22_DBR1_exp41: ["data/fastq/ERR3988056.fq.gz", "ACT1_dG_substrate"]
+    ctrl_yeast_ACT1_dG_Prp22_DBR1_Prp18kd_exp46: ["data/fastq/ERR3988057.fq.gz", "ACT1_dG_substrate"]
+    ctrl_yeast_ACT1_dG_Prp22_DBR1_Prp18kd_exp47: ["data/fastq/ERR3988058.fq.gz", "ACT1_dG_substrate"]
+    ctrl_yeast_ACT1_dG_Prp22_K512A_DBR1_exp39: ["data/fastq/ERR3988059.fq.gz", "ACT1_dG_substrate"]
+    ctrl_yeast_ACT1_dG_Prp22_K512A_DBR1_exp41: ["data/fastq/ERR3988060.fq.gz", "ACT1_dG_substrate"]
+    ctrl_yeast_ACT1_dG_Prp22_K512A_DBR1_Prp18kd_exp50: ["data/fastq/ERR3988061.fq.gz", "ACT1_dG_substrate"]
+    ctrl_yeast_ACT1_dG_Prp22_K512A_DBR1_Prp18kd_exp51: ["data/fastq/ERR3988062.fq.gz", "ACT1_dG_substrate"]
+    ctrl_yeast_ACT1_WT_Prp22_DBR1_Prp18kd_exp48: ["data/fastq/ERR3988063.fq.gz", "WT_actin_substrate"]
+    ctrl_yeast_ACT1_WT_Prp22_DBR1_Prp18kd_exp49: ["data/fastq/ERR3988064.fq.gz", "WT_actin_substrate"]
+    ctrl_yeast_ACT1_WT_Prp22_K512A_DBR1_Prp18kd_exp52: ["data/fastq/ERR3988065.fq.gz", "WT_actin_substrate"]
+    ctrl_yeast_ACT1_WT_Prp22_K512A_DBR1_Prp18kd_exp53: ["data/fastq/ERR3988066.fq.gz", "WT_actin_substrate"]
+    noUV_SMB1_FLAG_ACT1_AC_exp21: ["data/fastq/ERR3988067.fq.gz", "AC_actin_substrate"]
+    noUV_SMB1_FLAG_UBC4_AC_short_exp8: ["data/fastq/ERR3988068.fq.gz", "AC_substrate"]
+    Prp16-FLAG_UBC4_AC_long_DBR1_exp23: ["data/fastq/ERR3988069.fq.gz", "AC_LONG_substrate"]
+    Prp16-G378A-FLAG_UBC4_WT_long_DBR1_exp24: ["data/fastq/ERR3988070.fq.gz", "WT_LONG_substrate"]
+    Prp16_FLAG_ACT1_AC_DBR1_exp32: ["data/fastq/ERR3988071.fq.gz", "AC_actin_substrate"]
+    Prp16_FLAG_ACT1_AC_exp29: ["data/fastq/ERR3988072.fq.gz", "AC_actin_substrate"]
+    Prp16_FLAG_ACT1_AC_exp31: ["data/fastq/ERR3988073.fq.gz", "AC_actin_substrate"]
+    PRP16_FLAG_UBC4_AC_long_exp15: ["data/fastq/ERR3988074.fq.gz", "AC_LONG_substrate"]
+    Prp16_FLAG_UBC4_AC_long_exp30: ["data/fastq/ERR3988075.fq.gz", "AC_LONG_substrate"]
+    Prp16_G378A-FLAG_ACT1_AC_DBR1_exp32: ["data/fastq/ERR3988076.fq.gz", "AC_actin_substrate"]
+    Prp16_G378A-FLAG_ACT1_AC_exp31: ["data/fastq/ERR3988077.fq.gz", "AC_actin_substrate"]
+    Prp16_G378A-FLAG_ACT1_WT_DBR1_exp32: ["data/fastq/ERR3988078.fq.gz", "WT_actin_substrate"]
+    Prp16_G378A-FLAG_ACT1_WT_exp31: ["data/fastq/ERR3988079.fq.gz", "WT_actin_substrate"]
+    Prp16_G378A-FLAG_ACT1_WText20_DBR1_exp33: ["data/fastq/ERR3988080.fq.gz", "ACT1_AC_ext20_substrate"]
+    Prp16_G378A-FLAG_ACT1_WText20_DBR1_exp43: ["data/fastq/ERR3988081.fq.gz", "ACT1_AC_ext20_substrate"]
+    Prp16_G378A-FLAG_ACT1_WText40_DBR1_exp34: ["data/fastq/ERR3988082.fq.gz", "ACT1_AC_ext40_substrate"]
+    Prp16_G378A-FLAG_ACT1_WText40_DBR1_exp44: ["data/fastq/ERR3988083.fq.gz", "ACT1_AC_ext40_substrate"]
+    Prp16_G378A-FLAG_ACT1_WTextSL_DBR1_exp35: ["data/fastq/ERR3988084.fq.gz", "ACT1_AC_extSL_substrate"]
+    Prp16_G378A-FLAG_ACT1_WTextSL_DBR1_exp45: ["data/fastq/ERR3988085.fq.gz", "ACT1_AC_extSL_substrate"]
+    Prp16_G378A-FLAG_UBC4_AC_long_DBR1_exp23: ["data/fastq/ERR3988086.fq.gz", "AC_LONG_substrate"]
+    Prp16_G378A_FLAG_ACT1_AC_exp29: ["data/fastq/ERR3988087.fq.gz", "AC_actin_substrate"]
+    Prp16_G378A_FLAG_ACT1_WT_exp29: ["data/fastq/ERR3988088.fq.gz", "WT_actin_substrate"]
+    PRP16_G378A_FLAG_UBC4_AC_long_exp15: ["data/fastq/ERR3988089.fq.gz", "AC_LONG_substrate"]
+    Prp16_G378A_FLAG_UBC4_AC_long_exp30: ["data/fastq/ERR3988090.fq.gz", "AC_LONG_substrate"]
+    PRP16_G378A_FLAG_UBC4_WT_long_exp16: ["data/fastq/ERR3988091.fq.gz", "WT_LONG_substrate"]
+    Prp16_G378A_FLAG_UBC4_WT_long_exp30: ["data/fastq/ERR3988092.fq.gz", "WT_LONG_substrate"]
+    Prp22-FLAG-His_yeast_ACT1_dG_Prp22_DBR1_exp39: ["data/fastq/ERR3988093.fq.gz", "ACT1_dG_substrate"]
+    Prp22-FLAG-His_yeast_ACT1_dG_Prp22_DBR1_exp41: ["data/fastq/ERR3988094.fq.gz", "ACT1_dG_substrate"]
+    Prp22-FLAG_UBC4_dG_long_DBR1_exp37: ["data/fastq/ERR3988095.fq.gz", "dG_UBC4_long_substrate"]
+    Prp22-FLAG_UBC4_dG_long_DBR1_exp38: ["data/fastq/ERR3988096.fq.gz", "dG_UBC4_long_substrate"]
+    Prp22_K512A_FLAG_UBC4_WT54_Prp22_K512A_exp28: ["data/fastq/ERR3988097.fq.gz", "WT_LS54_substrate"]
+    Prp22_K512A_yeast_ACT1_dG_DBR1_Prp18kd_exp50: ["data/fastq/ERR3988098.fq.gz", "ACT1_dG_substrate"]
+    Prp22_K512A_yeast_ACT1_dG_DBR1_Prp18kd_exp51: ["data/fastq/ERR3988099.fq.gz", "ACT1_dG_substrate"]
+    Prp22_K512A_yeast_ACT1_WT_DBR1_Prp18kd_exp52: ["data/fastq/ERR3988100.fq.gz", "WT_actin_substrate"]
+    Prp22_K512A_yeast_ACT1_WT_DBR1_Prp18kd_exp53: ["data/fastq/ERR3988101.fq.gz", "WT_actin_substrate"]
+    Prp22_K521A-FLAG-His_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_exp40: ["data/fastq/ERR3988102.fq.gz", "ACT1_3xMS2_substrate"]
+    Prp22_K521A-FLAG-His_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_exp42: ["data/fastq/ERR3988103.fq.gz", "ACT1_3xMS2_substrate"]
+    Prp22_K521A-FLAG-His_yeast_ACT1_dG_Prp22_K512A_DBR1_exp39: ["data/fastq/ERR3988104.fq.gz", "ACT1_dG_substrate"]
+    Prp22_K521A-FLAG-His_yeast_ACT1_dG_Prp22_K512A_DBR1_exp41: ["data/fastq/ERR3988105.fq.gz", "ACT1_dG_substrate"]
+    Prp22_K521A-FLAG_UBC4_dG_long_DBR1_exp37: ["data/fastq/ERR3988106.fq.gz", "dG_UBC4_long_substrate"]
+    Prp22_K521A-FLAG_UBC4_dG_long_DBR1_exp38: ["data/fastq/ERR3988107.fq.gz", "dG_UBC4_long_substrate"]
+    Prp22_K521A-FLAG_UBC4_WT54_DBR1_exp36: ["data/fastq/ERR3988108.fq.gz", "WT_LS54_substrate"]
+    Prp22_yeast_ACT1_dG_DBR1_Prp18kd_exp46: ["data/fastq/ERR3988109.fq.gz", "ACT1_dG_substrate"]
+    Prp22_yeast_ACT1_dG_DBR1_Prp18kd_exp47: ["data/fastq/ERR3988110.fq.gz", "ACT1_dG_substrate"]
+    Prp22_yeast_ACT1_WT_DBR1_Prp18kd_exp48: ["data/fastq/ERR3988111.fq.gz", "WT_actin_substrate"]
+    Prp22_yeast_ACT1_WT_DBR1_Prp18kd_exp49: ["data/fastq/ERR3988112.fq.gz", "WT_actin_substrate"]
+    SMB1_FLAG_ACT1_AC_exp21: ["data/fastq/ERR3988113.fq.gz", "AC_actin_substrate"]
+    SMB1_FLAG_His_UBC4_AC_short_exp8: ["data/fastq/ERR3988114.fq.gz", "AC_substrate"]
 
-# Experiment 2 PRP16
-    noUV_PRP16_FLAG_exp2: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_PRP16_FLAG_His_yeast_IRL3_exp2.fq.gz", "AC_substrate"]
-    noUV_PRP16_G378A_FLAG_exp2: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_PRP16_G378A_FLAG_His_yeast_IRL3_exp2.fq.gz", "AC_substrate"]
-    noUV_no_FLAGed_protein_exp2: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_yeast_no_FLAGed_protein_noUV_IRL3_exp2.fq.gz", "AC_substrate"]
-    PRP16_FLAG_exp2: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/PRP16_FLAG_His_yeast_IRL3_exp2.fq.gz", "AC_substrate"]
-    ctrl_no_FLAGed_protein_UV_exp2: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/ctrl_yeast_no_FLAGed_protein_UV_IRL3_exp2.fq.gz", "AC_substrate"]
-    PRP16_G378A_FLAG_exp2: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/PRP16_G378A_FLAG_His_yeast_IRL3_exp2.fq.gz", "AC_substrate"]
-
-# Experiment 3 PRP16
-    PRP16_FLAG_exp3: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/PRP16_FLAG_His_yeast_IRL3_exp3.fq.gz", "AC_substrate"]
-    noUV_PRP16_G378A_FLAG_exp3: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_PRP16_G378A_FLAG_His_yeast_IRL3_exp3.fq.gz", "AC_substrate"]
-    noUV_no_FLAGed_protein_exp3: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_yeast_no_FLAGed_protein_noUV_IRL3_exp3.fq.gz", "AC_substrate"]
-    noUV_PRP16_FLAG_exp3: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_PRP16_FLAG_His_yeast_IRL3_exp3.fq.gz", "AC_substrate"]
-    ctrl_no_FLAGed_protein_UV_exp3: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/ctrl_yeast_no_FLAGed_protein_UV_IRL3_exp3.fq.gz", "AC_substrate"]
-    PRP16_G378A_FLAG_exp3: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/PRP16_G378A_FLAG_His_yeast_IRL3_exp3.fq.gz", "AC_substrate"]
-
-# Experiment 4 PRP16 and controls for Experiment 8 SmB
-    ctrl_no_FLAGed_protein_UV_UBC4_AC_short_exp4_8: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/ctrl_yeast_no_FLAGed_protein_UV_IRL3_exp4.fq.gz", "AC_substrate"]
-    noUV_PRP16_G378A_FLAG_UBC4_AC_short_exp4: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_PRP16_G378A_FLAG_His_yeast_IRL3_exp4.fq.gz", "AC_substrate"]
-    PRP16_FLAG_UBC4_AC_short_exp4: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/PRP16_FLAG_His_yeast_IRL3_exp4.fq.gz", "AC_substrate"]
-    PRP16_G378A_FLAG_UBC4_AC_short_exp4: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/PRP16_G378A_FLAG_His_yeast_IRL3_exp4.fq.gz", "AC_substrate"]
-    noUV_PRP16_FLAG_UBC4_AC_short_exp4: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_PRP16_FLAG_His_yeast_IRL3_exp4.fq.gz", "AC_substrate"]
-    noUV_no_FLAGed_protein_UBC4_AC_short_exp4_8: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_yeast_no_FLAGed_protein_noUV_IRL3_exp4.fq.gz", "AC_substrate"]
-
-# Experiment 5 PRP16
-    noUV_PRP16_FLAG_exp5: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_PRP16_FLAG_His_yeast_IRL3_exp5.fq.gz", "AC_substrate"]
-    noUV_PRP16_G378A_FLAG_exp5: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_PRP16_G378A_FLAG_His_yeast_IRL3_exp5.fq.gz", "AC_substrate"]
-    noUV_no_FLAGed_protein_exp5: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_yeast_no_FLAGed_protein_noUV_IRL3_exp5.fq.gz", "AC_substrate"]
-    PRP16_FLAG_exp5: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/PRP16_FLAG_His_yeast_IRL3_exp5.fq.gz", "AC_substrate"]
-    ctrl_no_FLAGed_protein_UV_exp5: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/ctrl_yeast_no_FLAGed_protein_UV_IRL3_exp5.fq.gz", "AC_substrate"]
-    PRP16_G378A_FLAG_exp5: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/PRP16_G378A_FLAG_His_yeast_IRL3_exp5.fq.gz", "AC_substrate"]
-
-# Experiment 6 SMB1 control from lane 9
-    #noUV_SMB1_FLAG_His_IRL3_exp6: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane9/exp6_smb1_flag_noUV/demux_NNNNAGTTAAGGNNNNN.fq.gz", "AC_substrate"]
-    SMB1_FLAG_exp6: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane9/exp6_smb1_flag/demux_NNNNGTAACATTNNNNN.fq.gz", "AC_substrate"]
-
-# Experiment 7 SMB1 control
-    noUV_SMB1_FLAG_exp7: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_SMB1_FLAG_His_yeast_IRL3_exp7.fq.gz", "AC_substrate"]
-    SMB1_FLAG_exp7: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/SMB1_FLAG_His_yeast_IRL3_exp7.fq.gz", "AC_substrate"]
-
-# Experiment 8 SMB1 control, the no_tag control is in experiment 4
-    noUV_SMB1_FLAG_UBC4_AC_short_exp8: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/noUV_SMB1_FLAG_His_yeast_IRL3_exp8.fq.gz", "AC_substrate"]
-    SMB1_FLAG_His_UBC4_AC_short_exp8: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/SMB1_FLAG_His_yeast_IRL3_exp8.fq.gz", "AC_substrate"]
-
-# Experiment 9 PRP22, FROM LMB
-    noUV_PRP22_FLAG_LMB_exp9: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNGCTTGNNN.fq.gz", "DG_substrate"]
-    noUV_PRP22_K512A_FLAG_LMB_exp9: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNATCTGNNN.fq.gz", "DG_substrate"]
-    noUV_no_FLAGed_protein_LMB_exp9: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNCTGATNNN.fq.gz", "DG_substrate"]
-    PRP22_FLAG_LMB_exp9: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNTGTGGNNN.fq.gz", "DG_substrate"]
-    ctrl_no_FLAGed_protein_UV_LMB_exp9: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNTGTATNNN.fq.gz", "DG_substrate"]
-    PRP22_K512A_FLAG_LMB_exp9: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNCAGGGNNN.fq.gz", "DG_substrate"]
-
-# Experiment 9 PRP22, FROM CRICK lane 10
-    noUV_PRP22_FLAG_exp9: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane10/demux_NNNNGCTTGNNN.fq.gz", "DG_substrate"]
-    noUV_PRP22_K512A_FLAG_exp9: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane10/demux_NNNNATCTGNNN.fq.gz", "DG_substrate"]
-    noUV_no_FLAGed_protein_exp9: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane10/demux_NNNNCTGATNNN.fq.gz", "DG_substrate"]
-    PRP22_FLAG_exp9: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane10/demux_NNNNTGTGGNNN.fq.gz", "DG_substrate"]
-    ctrl_no_FLAGed_protein_UV_exp9: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane10/demux_NNNNTGTATNNN.fq.gz", "DG_substrate"]
-    PRP22_K512A_FLAG_exp9: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane10/demux_NNNNCAGGGNNN.fq.gz", "DG_substrate"]
-
-# Experiment 10 PRP16 from LMB, we don't have Crick lane 15 yet
-    noUV_PRP16_FLAG_exp10: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNAACTCCGTNNNNN.fq.gz", "AC_substrate"]
-    noUV_PRP16_G378A_FLAG_exp10: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNAACTCGGANNNNN.fq.gz", "AC_substrate"]
-    noUV_no_FLAGed_protein_exp10: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNAACTCTTANNNNN.fq.gz", "AC_substrate"]
-    PRP16_FLAG_exp10: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNAACTCCTGNNNNN.fq.gz", "AC_substrate"]
-    ctrl_no_FLAGed_protein_UV_exp10: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNAACTCAGGNNNNN.fq.gz", "AC_substrate"]
-    PRP16_G378A_FLAG_exp10: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNAACTCGTCNNNNN.fq.gz", "AC_substrate"]
-
-# Experiment 10 SMB1 control from LMB, we don't have Crick lane 15 yet
-    SMB1_FLAG_His_exp10: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNTCATCATTNNNNN.fq.gz", "AC_substrate"]
-    noUV_SMB1_FLAG_exp10: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNAACTCATTNNNNN.fq.gz", "AC_substrate"]
-
-# Experiment 11 PRP22 from LMB, we don't have Crick lane 15 yet
-    PRP22_FLAG_exp11: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNTCATCCTGNNNNN.fq.gz", "DG_substrate"]
-    noUV_PRP22_FLAG_exp11: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNTCATCCGTNNNNN.fq.gz", "DG_substrate"]
-    PRP22_K512A_FLAG_exp11: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNTCATCGTCNNNNN.fq.gz", "DG_substrate"]
-    noUV_PRP22_K512A_FLAG_exp11: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_lane15/l_demux_NNNNTCATCGGANNNNN.fq.gz", "DG_substrate"]
-
-# Experiment 12 Brr2 WT 1400, sequenced at Gurdon institute lane 16
-    ctrl_no_FLAGed_protein_UV_exp12: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/lisa_exp12_13_05022018_brr2_prp22/two/demux_NNNNTCATCNNN.fq.gz", "WT_1400_substrate"]
-    noUV_Brr2_FLAG_exp12: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/lisa_exp12_13_05022018_brr2_prp22/two/demux_NNNNCCTGCNNN.fq.gz", "WT_1400_substrate"]
-    Brr2_FLAG_lowRNAse_exp12: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/lisa_exp12_13_05022018_brr2_prp22/two/demux_NNNNGGAGCNNN.fq.gz", "WT_1400_substrate"]
-    Brr2_FLAG_highRNAse_exp12: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/lisa_exp12_13_05022018_brr2_prp22/two/demux_NNNNAGTCCNNN.fq.gz", "WT_1400_substrate"]
-
-# Experiment 13 PRP22 WT LS54, sequenced at Gurdon institute lane 16
-    ctrl_no_FLAGed_protein_UV_exp13: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/lisa_exp12_13_05022018_brr2_prp22/two/demux_NNNNTCGCCNNN.fq.gz", "WT_LS54_substrate"]
-    PRP22_K512A_FLAG_exp13: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/lisa_exp12_13_05022018_brr2_prp22/two/demux_NNNNCATACNNN.fq.gz", "WT_LS54_substrate"]
-    noUV_PRP22_K512A_FLAG_exp13: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/lisa_exp12_13_05022018_brr2_prp22/two/demux_NNNNGTAACNNN.fq.gz", "WT_LS54_substrate"]
-
-# Experiment 14 PRP22 WT LS54, short iCLIP and L3, sequenced at Gurdon institute lane 16
-    ctrl_no_FLAGed_protein_UV_exp14: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/lisa_exp12_13_05022018_brr2_prp22/demux_NNNNAGTTAATTNNNNN.fq.gz", "WT_LS54_substrate"]
-    PRP22_K512A_FLAG_exp14: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/lisa_exp12_13_05022018_brr2_prp22/demux_NNNNAGTTAAGGNNNNN.fq.gz", "WT_LS54_substrate"]
-    noUV_PRP22_K512A_FLAG_exp14: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/lisa_exp12_13_05022018_brr2_prp22/demux_NNNNAGTTATTANNNNN.fq.gz", "WT_LS54_substrate"]
-
-# Experiment 15
-    noUV_PRP16_FLAG_UBC4_AC_long_exp15: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNCATTTNNNlmb26.fq.gz", "AC_LONG_substrate"]
-    noUV_PRP16_G378A_FLAG_UBC4_AC_long_exp15: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNGTATTNNNlmb26.fq.gz", "AC_LONG_substrate"]
-    PRP16_FLAG_UBC4_AC_long_exp15: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNTTTAANNNlmb26.fq.gz", "AC_LONG_substrate"]
-    ctrl_no_FLAGed_protein_UV_UBC4_AC_long_exp15: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNGAATANNNlmb26.fq.gz", "AC_LONG_substrate"]
-    PRP16_G378A_FLAG_UBC4_AC_long_exp15: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNACCTTNNNlmb26.fq.gz", "AC_LONG_substrate"]
-
-# Experiment 16
-    ctrl_no_FLAGed_protein_UV_UBC4_WT_long_exp16: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNTGCGTNNNlmb26.fq.gz", "WT_LONG_substrate"]
-    PRP16_G378A_FLAG_UBC4_WT_long_exp16: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNCAAGTNNNlmb26.fq.gz", "WT_LONG_substrate"]
-    noUV_PRP16_G378A_FLAG_UBC4_WT_long_exp16: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNGCTCTNNNlmb26.fq.gz", "WT_LONG_substrate"]
-
-# Experiment 17
-    PRP16_G378A_FLAG_His_UBC4_WT_short_exp17: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNAGACTNNNlmb26.fq.gz", "WT_1400_substrate"]
-    noUV_PRP16_G378A_FLAG_UBC4_AC_short_exp17: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNTGTATNNNlmb26.fq.gz", "WT_1400_substrate"]
-
-# Experiment 18
-    noUV_PRP16_FLAG_UBC4_AC_short_DBR1_exp18: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNATCTGNNNlmb26.fq.gz", "AC_substrate"]
-    noUV_PRP16_G378A_FLAG_UBC4_AC_short_DBR1_exp18: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNCAGGGNNNlmb26.fq.gz", "AC_substrate"]
-    PRP16_FLAG_UBC4_AC_short_DBR1_exp18: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNGCTTGNNNlmb26.fq.gz", "AC_substrate"]
-    ctrl_no_FLAGed_protein_UV_UBC4_AC_short_DBR1_exp18: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNCTGATNNNlmb26.fq.gz", "AC_substrate"]
-    PRP16_G378A_FLAG_UBC4_AC_short_DBR1_exp18: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_26.02.2018_exp14151617/demux_NNNNTGTGGNNNlmb26.fq.gz", "AC_substrate"]
-
-# Experiment 19
-    SMB1_FLAG_exp19: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNGATCGTTANNNNN.va.fq.gz", "AC_LONG_substrate"]
-    noUV_SMB1_FLAG_exp19: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNCAGGGAGGNNNNN.va.fq.gz", "AC_LONG_substrate"]
-    ctrl_no_FLAGed_protein_UV_exp19: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNTGTGGATTNNNNN.va.fq.gz", "AC_LONG_substrate"]
-    noUV_PRP16_FLAG_DBR1_exp19: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNATACGCTGNNNNN.va.fq.gz", "AC_LONG_substrate"]
-    noUV_PRP16_G378A_FLAG_DBR1_exp19: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNCACAGGTCNNNNN.va.fq.gz", "AC_LONG_substrate"]
-    PRP16_FLAG_His_DBR1_exp19: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNTCGAGCGTNNNNN.va.fq.gz", "AC_LONG_substrate"]
-    PRP16_G378A_FLAG_DBR1_exp19: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNGTTTCGGANNNNN.va.fq.gz", "AC_LONG_substrate"]
-
-# Experiment 20
-    SMB1_FLAG_exp20: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNCCTGCTTANNNNN.va.fq.gz", "AC_LONG_substrate"]
-    noUV_SMB1_FLAG_exp20: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNTCATCAGGNNNNN.va.fq.gz", "AC_LONG_substrate"]
-    ctrl_no_FLAGed_protein_UV_exp20: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNAACTCATTNNNNN.va.fq.gz", "AC_LONG_substrate"]
-    noUV_PRP16_FLAG_DBR1_exp20: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNGGAGCCTGNNNNN.va.fq.gz", "AC_LONG_substrate"]
-    noUV_PRP16_G378A_FLAG_DBR1_exp20: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNTCGCCGTCNNNNN.va.fq.gz", "AC_LONG_substrate"]
-    PRP16_FLAG_DBR1_exp20: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNAGTCCCGTNNNNN.va.fq.gz", "AC_LONG_substrate"]
-    PRP16_G378A_FLAG_DBR1_exp20: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/gurdon_valentina_16.03.2018/demux_NNNNCATACGGANNNNN.va.fq.gz", "AC_LONG_substrate"]
-
-# Experiment 21
-    SMB1_FLAG_ACT1_AC_exp21: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_180502/demux_NNNNGCTTGNNN.merge.fq.gz", "AC_actin_substrate"]
-    noUV_SMB1_FLAG_ACT1_AC_exp21: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_180502/demux_NNNNATCTGNNN.merge.fq.gz", "AC_actin_substrate"]
-    ctrl_no_FLAGed_protein_UV_ACT1_AC_exp21: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_180502/demux_NNNNCTGATNNN.merge.fq.gz", "AC_actin_substrate"]
-    noUV_PRP16_FLAG_ACT1_AC_DBR1_exp21: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_180502/demux_NNNNCAGGGNNN.merge.fq.gz", "AC_actin_substrate"]
-    noUV_PRP16_G378A_FLAG_ACT1_AC_DBR1_exp21: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_180502/demux_NNNNATACGNNN.merge.fq.gz", "AC_actin_substrate"]
-    PRP16_FLAG_His_ACT1_AC_DBR1_exp21: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_180502/demux_NNNNTGTGGNNN.merge.fq.gz", "AC_actin_substrate"]
-    PRP16_G378A_FLAG_ACT1_AC_DBR1_exp21: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_180502/demux_NNNNGATCGNNN.merge.fq.gz", "AC_actin_substrate"]
-
-# Experiment 22
-    PRP16_G378A_FLAG_ACT1_WT_DBR1_exp22: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_180502/demux_NNNNTCGAGNNN.merge.fq.gz", "WT_actin_substrate"]
-    noUV_PRP16_G378A_FLAG_ACT1_WT_DBR1_exp22: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_180502/demux_NNNNCACAGNNN.merge.fq.gz", "WT_actin_substrate"]
-
-# Experiment 23
-    Prp16-FLAG_UBC4_AC_long_DBR1_exp23: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp16-FLAG-His_UBC4_AC_long_debranching_exp_23.fq.gz", "AC_LONG_substrate"]
-    noUV_Prp16-FLAG_UBC4_AC_long_DBR1_exp23: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp16-FLAG-His_noUV_UBC4_AC_long_debranching_exp_23.fq.gz", "AC_LONG_substrate"]
-    Prp16_G378A-FLAG_UBC4_AC_long_DBR1_exp23: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp16:G378A-FLAG-His_UBC4_AC_long_debranching_exp_23.fq.gz", "AC_LONG_substrate"]
-    noUV_Prp16_G378A-FLAG_UBC4_AC_long_DBR1_exp23: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp16:G378A-FLAG-His_noUV_UBC4_AC_long_debranching_exp_23.fq.gz", "AC_LONG_substrate"]
-    ctrl_notag_UBC4_AC_long_DBR1_exp23: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/ctrl_UBC4_AC_long_debranching_exp_23.fq.gz", "AC_LONG_substrate"]
-    ctrl_notag_Prp16_G378A_UBC4_AC_long_DBR1_exp23: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/ctrl_UBC4_AC_long_debranching_exp_23_rep2.fq.gz", "AC_LONG_substrate"]
-
-# Experiment 24
-    Prp16-FLAG_UBC4_WT_long_DBR1_exp24: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp16-FLAG-His_UBC4_WT_long_debranching_exp_24.fq.gz", "WT_LONG_substrate"]
-    noUV_Prp16-FLAG_UBC4_WT_long_DBR1_exp24: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp16-FLAG-His_noUV_UBC4_WT_long_debranching_exp_24.fq.gz", "WT_LONG_substrate"]
-    Prp16-G378A-FLAG_UBC4_WT_long_DBR1_exp24: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp16:G378A-FLAG-His_UBC4_WT_long_debranching_exp_24.fq.gz", "WT_LONG_substrate"]
-    noUV_Prp16-G378A-FLAG_UBC4_WT_long_DBR1_exp24: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp16:G378A-FLAG-His_noUV_UBC4_WT_long_debranching_exp_24.fq.gz", "WT_LONG_substrate"]
-    ctrl_notag_UBC4_WT_long_DBR1_exp24: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/ctrl_UBC4_WT_long_debranching_exp_24.fq.gz", "WT_LONG_substrate"]
-    ctrl_notag_Prp16_G378A_UBC4_WT_long_DBR1_exp24: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/ctrl_UBC4_WT_long_debranching_exp_24_rep2.fq.gz", "WT_LONG_substrate"]
-
-# Experiment 25
-    Prp22-FLAG_UBC4_dG_long_DBR1_exp25: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp22-FLAG-His_UBC4_dG_long_debranching_exp_25.fq.gz", "dG_UBC4_long_substrate"]
-    noUV_Prp22-FLAG_UBC4_dG_long_DBR1_exp25: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp22-FLAG-His_noUV_UBC4_dG_long_debranching_exp_25.fq.gz", "dG_UBC4_long_substrate"]
-    Prp22_K512A-FLAG_UBC4_dG_long_DBR1_exp25: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp22:K512A-FLAG-His_UBC4_dG_long_debranching_exp_25.fq.gz", "dG_UBC4_long_substrate"]
-    noUV_Prp22_K512A-FLAG_UBC4_dG_long_DBR1_exp25: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp22:K512A-FLAG-His_noUV_UBC4_dG_long_debranching_exp_25.fq.gz", "dG_UBC4_long_substrate"]
-    ctrl_notag_UBC4_dG_long_DBR1_exp25: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/ctrl_UBC4_dG_long_debranching_exp_25.fq.gz", "dG_UBC4_long_substrate"]
-    ctrl_notag_Prp22_K512A_UBC4_dG_long_DBR1_exp25: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/ctrl_UBC4_dG_long_debranching_exp_25_rep2.fq.gz", "dG_UBC4_long_substrate"]
-
-# Experiment 26
-    Prp22_K512A-FLAG_UBC4_WT54_DBR1_exp26: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp22:K512A-FLAG-His_UBC4_WT_54_debranching_exp_26.fq.gz", "WT_LS54_substrate"]
-    noUV_Prp22_K512A-FLAG_UBC4_WT54_DBR1_exp26: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/Prp22:K512A-FLAG-His_noUV_UBC4_WT_54_debranching_exp_26.fq.gz", "WT_LS54_substrate"]
-    crtl_notag_Prp22_K512A_UBC4_WT54_DBR1_exp26: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_12.11.18/crtl_UBC4_WT_54_debranching_exp_26.fq.gz", "WT_LS54_substrate"]
-
-# Experiment 27
-# Seperate, needs to map to whole genome
-#Prp43-FLAG__exp_27.fq.gz
-#Prp43-FLAG_noUV_exp_27.fq.gz
-
-
-# Note there is no DBR1 in experiments 28,29,30
-# Experiment 28
-    Prp22_FLAG_UBC4_dG_long_exp28: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp22-FLAG-His_UBC4_dG-long_noDBR1_exp_28.fq.gz", "dG_UBC4_long_substrate"]
-    noUV_Prp22_FLAG_UBC4_dG_long_exp28: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp22-FLAG-His_noUV_UBC4_dG-long_noDBR1_exp_28.fq.gz", "dG_UBC4_long_substrate"]
-    Prp22_K512A_FLAG_UBC4_WT54_Prp22_K512A_exp28: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp22:K512A-FLAG-His_UBC4_54_Prp22:K512A_noDBR1_exp_28.fq.gz", "WT_LS54_substrate"]
-    Prp22_K512A_FLAG_UBC4_dG_long_noDBR1_exp28: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp22:K512A-FLAG-His_UBC4_dG-long_noDBR1_exp_28.fq.gz", "dG_UBC4_long_substrate"]
-    noUV_Prp22_K512A_FLAG_UBC4_WT54_Prp22_K512A_exp28: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp22:K512A-FLAG-His_noUV_UBC4_54_Prp22:K512A_noDBR1_exp_28.fq.gz", "WT_LS54_substrate"]
-    noUV_Prp22_K512A_FLAG_UBC4_dG_long_exp28: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp22:K512A-FLAG-His_noUV_UBC4_dG-long_noDBR1_exp_28.fq.gz", "dG_UBC4_long_substrate"]
-    ctrl_notag_Prp22_K512A_UV_UBC4_WT54_exp28: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/ctrl_no_tag_UV_UBC4_54_Prp22:K512A_noDBR1_exp_28.fq.gz", "WT_LS54_substrate"]
-    ctrl_notag_Prp22_K512A_UV_UBC4_dG_long_exp28: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/ctrl_no_tag_UV_UBC4_dG-long_Prp22:K512A_noDBR1_exp_28.fq.gz", "dG_UBC4_long_substrate"]
-    ctrl_notag_UV_UBC4_dG_long_exp28: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/ctrl_no_tag_UV_UBC4_dG-long_noDBR1_exp_28.fq.gz", "dG_UBC4_long_substrate"]
-# Experiment 29
-    Prp16_FLAG_ACT1_AC_exp29: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16-FLAG-His_ACT1_AC_noDBR1_exp_29.fq.gz", "AC_actin_substrate"]
-    Prp16_FLAG_ACT1_WT_exp29: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16-FLAG-His_ACT1_WT_noDBR1_exp_29.fq.gz", "WT_actin_substrate"]
-    noUV_Prp16_FLAG_ACT1_AC_exp29: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16-FLAG-His_noUV_ACT1_AC_noDBR1_exp_29.fq.gz", "AC_actin_substrate"]
-    noUV_Prp16_FLAG_ACT1_WT_exp29: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16-FLAG-His_noUV_ACT1_WT_noDBR1_exp_29.fq.gz", "WT_actin_substrate"]
-    Prp16_G378A_FLAG_ACT1_AC_exp29: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16:G378A-FLAG-His_ACT1_AC_noDBR1_exp_29.fq.gz", "AC_actin_substrate"]
-    Prp16_G378A_FLAG_ACT1_WT_exp29: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16:G378A-FLAG-His_ACT1_WT_noDBR1_exp_29.fq.gz", "WT_actin_substrate"]
-    noUV_Prp16_G378A_FLAG_ACT1_AC_exp29: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16:G378A-FLAG-His_noUV_ACT1_AC_noDBR1_exp_29.fq.gz", "AC_actin_substrate"]
-    noUV_Prp16_G378A_FLAG_ACT1_WT_exp29: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16:G378A-FLAG-His_noUV_ACT1_WT_noDBR1_exp_29.fq.gz", "WT_actin_substrate"]
-    ctrl_notag_UV_ACT1_AC_Prp16_G378A_exp29: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/ctrl_no_tag_UV_ACT1_AC_Prp16:G378A_noDBR1_exp_29.fq.gz","AC_actin_substrate"]
-    ctrl_notag_UV_ACT1_AC_exp29: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/ctrl_no_tag_UV_ACT1_AC_noDBR1_exp_29.fq.gz", "AC_actin_substrate"]
-    ctrl_notag_UV_ACT1_WT_Prp16_G378A_exp29: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/ctrl_no_tag_UV_ACT1_WT_Prp16:G378A_noDBR1_exp_29.fq.gz", "WT_actin_substrate"]
-    ctrl_notag_UV_ACT1_WT_exp29: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/ctrl_no_tag_UV_ACT1_WT_noDBR1_exp_29.fq.gz", "WT_actin_substrate"]
-# Experiment 30
-    Prp16_FLAG_UBC4_AC_long_exp30: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16-FLAG-His_UBC4_AC_long_noDBR1_exp_30.fq.gz", "AC_LONG_substrate"]
-    Prp16_FLAG_UBC4_WT_long_exp30: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16-FLAG-His_UBC4_WT_long_noDBR1_exp_30.fq.gz", "WT_LONG_substrate"]
-    noUV_Prp16_FLAG_UBC4_AC_long_exp30: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16-FLAG-His_noUV_UBC4_AC_long_noDBR1_exp_30.fq.gz", "AC_LONG_substrate"]
-    noUV_Prp16_FLAG_UBC4_WT_long_exp30: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16-FLAG-His_noUV_UBC4_WT_long_noDBR1_exp_30.fq.gz", "WT_LONG_substrate"]
-    Prp16_G378A_FLAG_UBC4_AC_long_exp30: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16:G378A-FLAG-His_UBC4_AC_long_noDBR1_exp_30.fq.gz", "AC_LONG_substrate"]
-    Prp16_G378A_FLAG_UBC4_WT_long_exp30: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16:G378A-FLAG-His_UBC4_WT_long_noDBR1_exp_30.fq.gz", "WT_LONG_substrate"]
-    noUV_Prp16_G378A_FLAG_UBC4_AC_long_exp30: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16:G378A-FLAG-His_noUV_UBC4_AC_long_noDBR1_exp_30.fq.gz", "AC_LONG_substrate"]
-    noUV_Prp16_G378A_FLAG_UBC4_WT_long_exp30: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/Prp16:G378A-FLAG-His_noUV_UBC4_WT_long_noDBR1_exp_30.fq.gz", "WT_LONG_substrate"]
-    ctrl_notag_Prp16_G378A_UV_UBC4_AC_long_exp30: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/ctrl_no_tag_UV_UBC4_AC_long_Prp16:G378A_noDBR1_exp_30.fq.gz", "AC_LONG_substrate"]
-    ctrl_notag_UV_UBC4_AC_long_exp30: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/ctrl_no_tag_UV_UBC4_AC_long_noDBR1_exp_30.fq.gz", "AC_LONG_substrate"]
-    ctrl_notag_Prp16_G378A_UV_UBC4_WT_long_exp30: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/ctrl_no_tag_UV_UBC4_WT_long_Prp16:G378A_noDBR1_exp_30.fq.gz", "WT_LONG_substrate"]
-    ctrl_notag_UV_UBC4_WT_long_exp30: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/ctrl_no_tag_UV_UBC4_WT_long_noDBR1_exp_30.fq.gz", "WT_LONG_substrate"]
-
-# Experiment 33, 34, 35, 36, 37 and 38
-    ctrl_notag_Prp16_G378A_ACT1_WText20_DBR1_exp33: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/ctrl_yeast_ACT1_AC_ext20Prp16_G378ADBR1_20190201_JU.fq.gz", "ACT1_AC_ext20_substrate"]
-    ctrl_notag_Prp16_G378A_ACT1_WText40_DBR1_exp34: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/ctrl_yeast_ACT1_AC_ext40Prp16_G378ADBR1_20190201_JU.fq.gz", "ACT1_AC_ext40_substrate"]
-    ctrl_notag_Prp16_G378A_ACT1_WTextSL_DBR1_exp35: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/ctrl_yeast_ACT1_AC_extSLPrp16_G378ADBR1_20190201_JU.fq.gz", "ACT1_AC_extSL_substrate"]
-    ctrl_notag_Prp22_K512A_UBC4_dG_long_DBR1_exp37: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/ctrl_yeast_UBC4_dG_longPrp22_K512ADBR1_20190201_JU_2.fq.gz", "dG_UBC4_long_substrate"]
-    ctrl_notag_UBC4_dG_long_DBR1_exp37: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/ctrl_yeast_UBC4_dG_longPrp22_K512ADBR1_20190201_JU_3.fq.gz", "dG_UBC4_long_substrate"]
-    ctrl_notag_Prp22_K512A_UBC4_dG_long_DBR1_exp38: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/ctrl_yeast_UBC4_dG_longPrp22_K512ADBR1_20190201_JU_6.fq.gz", "dG_UBC4_long_substrate"]
-    ctrl_notag_UBC4_dG_long_DBR1_exp38: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/ctrl_yeast_UBC4_dG_longPrp22_K512ADBR1_20190201_JU.fq.gz", "dG_UBC4_long_substrate"]
-    ctrl_notag_Prp22_K512A_UBC4_WT54_DBR1_exp36: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/ctrl_yeast_UBC4_WT-54Prp22_K512ADBR1_20190201_JU.fq.gz", "WT_LS54_substrate"]
-    noUV_Prp16_G378A-FLAG_ACT1_WText20_DBR1_exp33: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/noUV_Prp16_G378A-FLAG-His_yeast_ACT1_AC_ext20Prp16_G378ADBR1_20190201_JU.fq.gz", "ACT1_AC_ext20_substrate"]
-    noUV_Prp16_G378A-FLAG_ACT1_WText40_DBR1_exp34: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/noUV_Prp16_G378A-FLAG-His_yeast_ACT1_AC_ext40Prp16_G378ADBR1_20190201_JU.fq.gz", "ACT1_AC_ext40_substrate"]
-    noUV_Prp16_G378A-FLAG_ACT1_WTextSL_DBR1_exp35: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/noUV_Prp16_G378A-FLAG-His_yeast_ACT1_AC_extSLPrp16_G378ADBR1_20190201_JU.fq.gz", "ACT1_AC_extSL_substrate"]
-    noUV_Prp22-FLAG_UBC4_dG_long_Prp22_DBR1_exp38: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/noUV_Prp22-FLAG-His_yeast_UBC4_dG_longPrp22_K512ADBR1_20190201_JU_5.fq.gz", "dG_UBC4_long_substrate"]
-    noUV_Prp22-FLAG_UBC4_dG_long_Prp22_DBR1_exp37: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/noUV_Prp22-FLAG-His_yeast_UBC4_dG_longPrp22_K512ADBR1_20190201_JU.fq.gz", "dG_UBC4_long_substrate"]
-    noUV_Prp22_K521A-FLAG_UBC4_dG_long_DBR1_exp37: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/noUV_Prp22_K521A-FLAG-His_yeast_UBC4_dG_longPrp22_K512ADBR1_20190201_JU_2.fq.gz", "dG_UBC4_long_substrate"]
-    noUV_Prp22_K521A-FLAG_UBC4_dG_long_DBR1_exp38: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/noUV_Prp22_K521A-FLAG-His_yeast_UBC4_dG_longPrp22_K512ADBR1_20190201_JU.fq.gz", "dG_UBC4_long_substrate"]
-    noUV_Prp22_K521A-FLAG_UBC4_WT54_DBR1_exp36: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/noUV_Prp22_K521A-FLAG-His_yeast_UBC4_WT-54Prp22_K512ADBR1_20190201_JU.fq.gz", "WT_LS54_substrate"]
-    Prp16_G378A-FLAG_ACT1_WText20_DBR1_exp33: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/Prp16_G378A-FLAG-His_yeast_ACT1_AC_ext20Prp16_G378ADBR1_20190201_JU.fq.gz", "ACT1_AC_ext20_substrate"]
-    Prp16_G378A-FLAG_ACT1_WText40_DBR1_exp34: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/Prp16_G378A-FLAG-His_yeast_ACT1_AC_ext40Prp16_G378ADBR1_20190201_JU.fq.gz", "ACT1_AC_ext40_substrate"]
-    Prp16_G378A-FLAG_ACT1_WTextSL_DBR1_exp35: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/Prp16_G378A-FLAG-His_yeast_ACT1_AC_extSLPrp16_G378ADBR1_20190201_JU.fq.gz", "ACT1_AC_extSL_substrate"]
-    Prp22-FLAG_UBC4_dG_long_DBR1_exp38: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/Prp22-FLAG-His_yeast_UBC4_dG_longPrp22_K512ADBR1_20190201_JU_4.fq.gz", "dG_UBC4_long_substrate"]
-    Prp22-FLAG_UBC4_dG_long_DBR1_exp37: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/Prp22-FLAG-His_yeast_UBC4_dG_longPrp22_K512ADBR1_20190201_JU.fq.gz", "dG_UBC4_long_substrate"]
-    Prp22_K521A-FLAG_UBC4_dG_long_DBR1_exp37: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/Prp22_K521A-FLAG-His_yeast_UBC4_dG_longPrp22_K512ADBR1_20190201_JU_2.fq.gz", "dG_UBC4_long_substrate"]
-    Prp22_K521A-FLAG_UBC4_dG_long_DBR1_exp38: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/Prp22_K521A-FLAG-His_yeast_UBC4_dG_longPrp22_K512ADBR1_20190201_JU.fq.gz", "dG_UBC4_long_substrate"]
-    Prp22_K521A-FLAG_UBC4_WT54_DBR1_exp36: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201902_UN1902LS/final/Prp22_K521A-FLAG-His_yeast_UBC4_WT-54Prp22_K512ADBR1_20190201_JU.fq.gz", "WT_LS54_substrate"]
-
-# Experiment 31, 32 (from Crick lane 37 demultiplexed on imaps april 20)
-    ctrl_notag_UV_ACT1_AC_Prp16_G378A_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/ctrl-yeast-act1-ac-prp16-g37a-dbr1-20190117-ju_trimmed.fq.gz","AC_actin_substrate"]
-    ctrl_notag_UV_ACT1_AC_Prp16_G378A_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/ctrl-yeast-act1-ac-prp16-g37a-nodbr1-1-ubc4-spiked-in-20190117-ju_trimmed.fq.gz","AC_actin_substrate"]
-    ctrl_notag_UV_ACT1_AC_Prp16_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/ctrl-yeast-act1-ac-prp16wt-dbr1-20190117-ju_trimmed.fq.gz","AC_actin_substrate"]
-    ctrl_notag_UV_ACT1_AC_Prp16_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/ctrl-yeast-act1-ac-prp16wt-nodbr1-1-ubc4-spiked-in-20190117-ju_trimmed.fq.gz","AC_actin_substrate"]
-    ctrl_notag_UV_ACT1_WT_Prp16_G378A_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/ctrl-yeast-act1-wt-prp16-g378a-dbr1-20190117-ju_trimmed.fq.gz", "WT_actin_substrate"]
-    ctrl_notag_UV_ACT1_WT_Prp16_G378A_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/ctrl-yeast-act1-wt-prp16-g378a-nodbr1-1-ubc4-spiked-in-20190117-ju_trimmed.fq.gz", "WT_actin_substrate"]
-    ctrl_notag_UV_ACT1_WT_Prp16_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/ctrl-yeast-act1-wt-prp16wt-dbr1-20190117-ju_trimmed.fq.gz", "WT_actin_substrate"]
-    ctrl_notag_UV_ACT1_WT_Prp16_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/ctrl-yeast-act1-wt-prp16wt-nodbr1-1-ubc4-spiked-in-20190117-ju_trimmed.fq.gz", "WT_actin_substrate"]
-    noUV_Prp16_FLAG_ACT1_AC_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/nouv-prp16-flag-his-yeast-act1-ac-prp16wt-dbr1-20190117-ju_trimmed.fq.gz","AC_actin_substrate"]
-    noUV_Prp16_FLAG_ACT1_AC_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/nouv-prp16-flag-his-yeast-act1-ac-prp16wt-nodbr1-1-ubc4-spiked-in-20190117-ju_trimmed.fq.gz","AC_actin_substrate"]
-    noUV_Prp16_FLAG_ACT1_WT_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/nouv-prp16-flag-his-yeast-act1-wt-prp16wt-dbr1-20190117-ju_trimmed.fq.gz", "WT_actin_substrate"]
-    noUV_Prp16_FLAG_ACT1_WT_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/nouv-prp16-flag-his-yeast-act1-wt-prp16wt-nodbr1-1-ubc4-spiked-in-20190117-ju_trimmed.fq.gz", "WT_actin_substrate"]
-    noUV_Prp16_G378A-FLAG_ACT1_AC_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/nouv-prp16-g378a-flag-his-yeast-act1-ac-prp16-g37a-dbr1-20190117-ju_trimmed.fq.gz","AC_actin_substrate"]
-    noUV_Prp16_G378A-FLAG_ACT1_AC_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/nouv-prp16-g378a-flag-his-yeast-act1-ac-prp16-g37a-nodbr1-1-ubc4-spiked-in-20190117-ju_trimmed.fq.gz","AC_actin_substrate"]
-    noUV_Prp16_G378A-FLAG_ACT1_WT_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/nouv-prp16-g378a-flag-his-yeast-act1-wt-prp16-g378a-dbr1-20190117-ju_trimmed.fq.gz", "WT_actin_substrate"]
-    noUV_Prp16_G378A-FLAG_ACT1_WT_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/nouv-prp16-g378a-flag-his-yeast-act1-wt-prp16-g378a-nodbr1-1-ubc4-spiked-in-20190117-ju_trimmed.fq.gz", "WT_actin_substrate"]
-    Prp16_FLAG_ACT1_AC_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/prp16-flag-his-yeast-act1-ac-prp16wt-dbr1-20190117-ju_trimmed.fq.gz","AC_actin_substrate"]
-    Prp16_FLAG_ACT1_AC_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/prp16-flag-his-yeast-act1-ac-prp16wt-nodbr1-1-ubc4-spiked-in-20190117-ju_trimmed.fq.gz","AC_actin_substrate"]
-    Prp16_FLAG_ACT1_WT_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/prp16-flag-his-yeast-act1-wt-prp16wt-dbr1-20190117-ju_trimmed.fq.gz", "WT_actin_substrate"]
-    Prp16_FLAG_ACT1_WT_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/prp16-flag-his-yeast-act1-wt-prp16wt-nodbr1-1-ubc4-spiked-in-20190117-ju_trimmed.fq.gz", "WT_actin_substrate"]
-    Prp16_G378A-FLAG_ACT1_AC_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/prp16-g378a-flag-his-yeast-act1-ac-prp16-g37a-dbr1-20190117-ju_trimmed.fq.gz","AC_actin_substrate"]
-    Prp16_G378A-FLAG_ACT1_AC_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/prp16-g378a-flag-his-yeast-act1-ac-prp16-g37a-nodbr1-1-ubc4-spiked-in-20190117-ju_trimmed.fq.gz","AC_actin_substrate"]
-    Prp16_G378A-FLAG_ACT1_WT_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/prp16-g378a-flag-his-yeast-act1-wt-prp16-g378a-dbr1-20190117-ju_trimmed.fq.gz", "WT_actin_substrate"]
-    Prp16_G378A-FLAG_ACT1_WT_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/exp_31_32/prp16-g378a-flag-his-yeast-act1-wt-prp16-g378a-nodbr1-1-ubc4-spiked-in-20190117-ju_trimmed.fq.gz", "WT_actin_substrate"]
-
-# Experiment 31, 32 (from Ben's 92 nucleotide lane)
-    bens_92bp_ctrl_notag_UV_ACT1_AC_Prp16_G378A_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_AC_Prp16_G37A_DBR1_20190117_JU.fq.gz","AC_actin_substrate"]
-    bens_92bp_ctrl_notag_UV_ACT1_AC_Prp16_G378A_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_AC_Prp16_G37A_noDBR1_1_UBC4_spiked_in_20190117_JU.fq.gz","AC_actin_substrate"]
-    bens_92bp_ctrl_notag_UV_ACT1_AC_Prp16_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_AC_Prp16WT_DBR1_20190117_JU.fq.gz","AC_actin_substrate"]
-    bens_92bp_ctrl_notag_UV_ACT1_AC_Prp16_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_AC_Prp16WT_noDBR1_1_UBC4_spiked_in_20190117_JU.fq.gz","AC_actin_substrate"]
-    bens_92bp_ctrl_notag_UV_ACT1_WT_Prp16_G378A_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_WT_Prp16_G378A_DBR1_20190117_JU.fq.gz", "WT_actin_substrate"]
-    bens_92bp_ctrl_notag_UV_ACT1_WT_Prp16_G378A_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_WT_Prp16_G378A_noDBR1_1_UBC4_spiked_in_20190117_JU.fq.gz", "WT_actin_substrate"]
-    bens_92bp_ctrl_notag_UV_ACT1_WT_Prp16_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_WT_Prp16WT_DBR1_20190117_JU.fq.gz", "WT_actin_substrate"]
-    bens_92bp_ctrl_notag_UV_ACT1_WT_Prp16_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_WT_Prp16WT_noDBR1_1_UBC4_spiked_in_20190117_JU.fq.gz", "WT_actin_substrate"]
-    bens_92bp_noUV_Prp16_FLAG_ACT1_AC_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/nouvPrp16-FLAG-His_yeast_ACT1_AC_Prp16WT_DBR1_20190117_JU.fq.gz","AC_actin_substrate"]
-    bens_92bp_noUV_Prp16_FLAG_ACT1_AC_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/nouvPrp16-FLAG-His_yeast_ACT1_AC_Prp16WT_noDBR1_1_UBC4_spiked_in_20190117_JU.fq.gz","AC_actin_substrate"]
-    bens_92bp_noUV_Prp16_FLAG_ACT1_WT_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/nouvPrp16-FLAG-His_yeast_ACT1_WT_Prp16WT_DBR1_20190117_JU.fq.gz", "WT_actin_substrate"]
-    bens_92bp_noUV_Prp16_FLAG_ACT1_WT_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/nouvPrp16-FLAG-His_yeast_ACT1_WT_Prp16WT_noDBR1_1_UBC4_spiked_in_20190117_JU.fq.gz", "WT_actin_substrate"]
-    bens_92bp_noUV_Prp16_G378A-FLAG_ACT1_AC_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/nouvPrp16_G378A-FLAG-His_yeast_ACT1_AC_Prp16_G37A_DBR1_20190117_JU.fq.gz","AC_actin_substrate"]
-    bens_92bp_noUV_Prp16_G378A-FLAG_ACT1_AC_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/nouvPrp16_G378A-FLAG-His_yeast_ACT1_AC_Prp16_G37A_noDBR1_1_UBC4_spiked_in_20190117_JU.fq.gz","AC_actin_substrate"]
-    bens_92bp_noUV_Prp16_G378A-FLAG_ACT1_WT_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/nouvPrp16_G378A-FLAG-His_yeast_ACT1_WT_Prp16_G378A_DBR1_20190117_JU.fq.gz", "WT_actin_substrate"]
-    bens_92bp_noUV_Prp16_G378A-FLAG_ACT1_WT_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/nouvPrp16_G378A-FLAG-His_yeast_ACT1_WT_Prp16_G378A_noDBR1_1_UBC4_spiked_in_20190117_JU.fq.gz", "WT_actin_substrate"]
-    bens_92bp_Prp16_FLAG_ACT1_AC_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp16-FLAG-His_yeast_ACT1_AC_Prp16WT_DBR1_20190117_JU.fq.gz","AC_actin_substrate"]
-    bens_92bp_Prp16_FLAG_ACT1_AC_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp16-FLAG-His_yeast_ACT1_AC_Prp16WT_noDBR1_1_UBC4_spiked_in_20190117_JU.fq.gz","AC_actin_substrate"]
-    bens_92bp_Prp16_FLAG_ACT1_WT_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp16-FLAG-His_yeast_ACT1_WT_Prp16WT_DBR1_20190117_JU.fq.gz", "WT_actin_substrate"]
-    bens_92bp_Prp16_FLAG_ACT1_WT_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp16-FLAG-His_yeast_ACT1_WT_Prp16WT_noDBR1_1_UBC4_spiked_in_20190117_JU.fq.gz", "WT_actin_substrate"]
-    bens_92bp_Prp16_G378A-FLAG_ACT1_AC_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp16_G378A-FLAG-His_yeast_ACT1_AC_Prp16_G37A_DBR1_20190117_JU.fq.gz","AC_actin_substrate"]
-    bens_92bp_Prp16_G378A-FLAG_ACT1_AC_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp16_G378A-FLAG-His_yeast_ACT1_AC_Prp16_G37A_noDBR1_1_UBC4_spiked_in_20190117_JU.fq.gz","AC_actin_substrate"]
-    bens_92bp_Prp16_G378A-FLAG_ACT1_WT_DBR1_exp32: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp16_G378A-FLAG-His_yeast_ACT1_WT_Prp16_G378A_DBR1_20190117_JU.fq.gz", "WT_actin_substrate"]
-    bens_92bp_Prp16_G378A-FLAG_ACT1_WT_exp31: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp16_G378A-FLAG-His_yeast_ACT1_WT_Prp16_G378A_noDBR1_1_UBC4_spiked_in_20190117_JU.fq.gz", "WT_actin_substrate"]
-
-# Experiment 39, 40, 41, 42 (from Ben's 92 nucleotide lane)
-    ctrl_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_exp_40: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_20190304_JU_exp40.fq.gz","ACT1_3xMS2_substrate"]
-    ctrl_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_exp_42: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_20190304_JU.fq.gz","ACT1_3xMS2_substrate"]
-    ctrl_yeast_ACT1_dG_Prp22_DBR1_exp39: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_dG_Prp22_DBR1_20190304_JU_exp39.fq.gz","ACT1_dG_substrate"]
-    ctrl_yeast_ACT1_dG_Prp22_DBR1_exp41: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_dG_Prp22_DBR1_20190304_JU.fq.gz","ACT1_dG_substrate"]
-    ctrl_yeast_ACT1_dG_Prp22_K512A_DBR1_exp39: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_dG_Prp22_K512A_DBR1_20190304_JU_exp39.fq.gz","ACT1_dG_substrate"]
-    ctrl_yeast_ACT1_dG_Prp22_K512A_DBR1_exp41: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/ctrl_yeast_ACT1_dG_Prp22_K512A_DBR1_20190304_JU.fq.gz","ACT1_dG_substrate"]
-    noUV_Prp22-FLAG-His_yeast_ACT1_dG_Prp22_DBR1_exp39: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/noUV_Prp22-FLAG-His_yeast_ACT1_dG_Prp22_DBR1_20190304_JU_exp39.fq.gz","ACT1_dG_substrate"]
-    noUV_Prp22-FLAG-His_yeast_ACT1_dG_Prp22_DBR1_exp41: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/noUV_Prp22-FLAG-His_yeast_ACT1_dG_Prp22_DBR1_20190304_JU.fq.gz","ACT1_dG_substrate"]
-    noUV_Prp22_K512A-FLAG-His_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_exp40: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/noUV_Prp22_K512A-FLAG-His_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_20190304_JU_exp40.fq.gz","ACT1_3xMS2_substrate"]
-    noUV_Prp22_K512A-FLAG-His_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_exp42: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/noUV_Prp22_K512A-FLAG-His_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_20190304_JU.fq.gz","ACT1_3xMS2_substrate"]
-    noUV_Prp22_K512A-FLAG-His_yeast_ACT1_dG_Prp22_K512A_DBR1_exp39: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/noUV_Prp22_K512A-FLAG-His_yeast_ACT1_dG_Prp22_K512A_DBR1_20190304_JU_exp39.fq.gz","ACT1_dG_substrate"]
-    noUV_Prp22_K512A-FLAG-His_yeast_ACT1_dG_Prp22_K512A_DBR1_exp41: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/noUV_Prp22_K512A-FLAG-His_yeast_ACT1_dG_Prp22_K512A_DBR1_20190304_JU.fq.gz","ACT1_dG_substrate"]
-    Prp22-FLAG-His_yeast_ACT1_dG_Prp22_DBR1_exp39: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp22-FLAG-His_yeast_ACT1_dG_Prp22_DBR1_20190304_JU_exp39.fq.gz","ACT1_dG_substrate"]
-    Prp22-FLAG-His_yeast_ACT1_dG_Prp22_DBR1_exp41: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp22-FLAG-His_yeast_ACT1_dG_Prp22_DBR1_20190304_JU.fq.gz","ACT1_dG_substrate"]
-    Prp22_K521A-FLAG-His_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_exp40: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp22_K521A-FLAG-His_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_20190304_JU_exp40.fq.gz","ACT1_3xMS2_substrate"]
-    Prp22_K521A-FLAG-His_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_exp42: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp22_K521A-FLAG-His_yeast_ACT1_3xMS2_Prp22_K512A_DBR1_20190304_JU.fq.gz","ACT1_3xMS2_substrate"]
-    Prp22_K521A-FLAG-His_yeast_ACT1_dG_Prp22_K512A_DBR1_exp39: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp22_K521A-FLAG-His_yeast_ACT1_dG_Prp22_K512A_DBR1_20190304_JU_exp39.fq.gz","ACT1_dG_substrate"]
-    Prp22_K521A-FLAG-His_yeast_ACT1_dG_Prp22_K512A_DBR1_exp41: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201904_UN1903LS/final_demux/Prp22_K521A-FLAG-His_yeast_ACT1_dG_Prp22_K512A_DBR1_20190304_JU.fq.gz","ACT1_dG_substrate"]
-
-# Experiment 43-45
-    ctrl_notag_Prp16_G378A_ACT1_WText20_DBR1_exp43 : ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane41_exp43_44_45/ctrl-yeast-uv-act1-ext20-prp16-g378a-nodbr1-20190611-ju-1.fq.gz","ACT1_AC_ext20_substrate"]
-    ctrl_notag_Prp16_G378A_ACT1_WTextSL_DBR1_exp44 : ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane41_exp43_44_45/ctrl-yeast-uv-act1-extSL-prp16-g378a-nodbr1-20190611-ju-1-1.fq.gz","ACT1_AC_extSL_substrate"]
-    ctrl_notag_Prp16_G378A_ACT1_WText40_DBR1_exp45 : ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane41_exp43_44_45/ctrl-yeast-uv-act1-ext40-prp16-g378a-nodbr1-20190611-ju-1.fq.gz","ACT1_AC_ext40_substrate"]
-    noUV_Prp16_G378A-FLAG_ACT1_WText20_DBR1_exp43: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane41_exp43_44_45/nouv-prp16-g378a-flag-yeast-nouv-act1-ext20-prp16-g378a-nodbr1-20190611-ju-1.fq.gz","ACT1_AC_ext20_substrate"]
-    noUV_Prp16_G378A-FLAG_ACT1_WTextSL_DBR1_exp44: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane41_exp43_44_45/nouv-prp16-g378a-flag-yeast-nouv-act1-extSL-prp16-g378a-nodbr1-20190611-ju-1-1.fq.gz","ACT1_AC_extSL_substrate"]
-    noUV_Prp16_G378A-FLAG_ACT1_WText40_DBR1_exp45: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane41_exp43_44_45/nouv-prp16-g378a-flag-yeast-nouv-act1-ext40-prp16-g378a-nodbr1-20190611-ju-1.fq.gz","ACT1_AC_ext40_substrate"]
-    Prp16_G378A-FLAG_ACT1_WText20_DBR1_exp43: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane41_exp43_44_45/prp16-g378a-flag-yeast-uv-act1-ext20-prp16-g378a-nodbr1-20190611-ju-1.fq.gz","ACT1_AC_ext20_substrate"]
-    Prp16_G378A-FLAG_ACT1_WTextSL_DBR1_exp44: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane41_exp43_44_45/prp16-g378a-flag-yeast-uv-act1-extSL-prp16-g378a-flag-nodbr1-20190611-ju-1.fq.gz","ACT1_AC_extSL_substrate"]
-    Prp16_G378A-FLAG_ACT1_WText40_DBR1_exp45: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/crick_lane41_exp43_44_45/prp16-g378a-flag-yeast-uv-act1-ext40-prp16-g378a-nodbr1-20190611-ju-1.fq.gz","ACT1_AC_ext40_substrate"]
-
-# Experiment 46-53
-    ctrl_yeast_ACT1_dG_Prp22_K512A_DBR1_Prp18kd_exp51: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/ctrl_yeast_ACT1_dG_Prp22_K512A_DBR1_Prp18_depleted_20190416_JU_2.fq.gz","ACT1_dG_substrate"]
-    ctrl_yeast_ACT1_dG_Prp22_K512A_DBR1_Prp18kd_exp50: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/ctrl_yeast_ACT1_dG_Prp22_K512A_DBR1_Prp18_depleted_20190416_JU.fq.gz","ACT1_dG_substrate"]
-    ctrl_yeast_ACT1_WT_Prp22_K512A_DBR1_Prp18kd_exp53: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/ctrl_yeast_ACT1_WT_Prp22_K512A_DBR1_Prp18_depleted_20190416_JU_2.fq.gz", "WT_actin_substrate"]
-    ctrl_yeast_ACT1_WT_Prp22_K512A_DBR1_Prp18kd_exp52: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/ctrl_yeast_ACT1_WT_Prp22_K512A_DBR1_Prp18_depleted_20190416_JU.fq.gz", "WT_actin_substrate"]
-    ctrl_yeast_ACT1_dG_Prp22_DBR1_Prp18kd_exp47: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/ctrl_yeast_UV_ACT1_dG_Prp22-WT_DBR1_Prp18-depleted_20190416_JU_2.fq.gz","ACT1_dG_substrate"]
-    ctrl_yeast_ACT1_dG_Prp22_DBR1_Prp18kd_exp46: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/ctrl_yeast_UV_ACT1_dG_Prp22-WT_DBR1_Prp18-depleted_20190416_JU.fq.gz","ACT1_dG_substrate"]
-    ctrl_yeast_ACT1_WT_Prp22_DBR1_Prp18kd_exp49: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/ctrl_yeast_UV_ACT1_WT_Prp22-WT_DBR1_Prp18-depleted_20190416_JU_2.fq.gz", "WT_actin_substrate"]
-    ctrl_yeast_ACT1_WT_Prp22_DBR1_Prp18kd_exp48: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/ctrl_yeast_UV_ACT1_WT_Prp22-WT_DBR1_Prp18-depleted_20190416_JU.fq.gz", "WT_actin_substrate"]
-
-    noUV_Prp22_yeast_ACT1_dG_DBR1_Prp18kd_exp47: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/noUV_Prp22-FLAG_yeast_noUV_ACT1_dG_Prp22-WT_DBR1_Prp18-depleted_20190416_JU_2.fq.gz","ACT1_dG_substrate"]
-    noUV_Prp22_yeast_ACT1_dG_DBR1_Prp18kd_exp46: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/noUV_Prp22-FLAG_yeast_noUV_ACT1_dG_Prp22-WT_DBR1_Prp18-depleted_20190416_JU.fq.gz","ACT1_dG_substrate"]
-    noUV_Prp22_yeast_ACT1_WT_DBR1_Prp18kd_exp49: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/noUV_Prp22-FLAG_yeast_noUV_ACT1_WT_Prp22-WT_DBR1_Prp18-depleted_20190416_JU_2.fq.gz", "WT_actin_substrate"]
-    noUV_Prp22_yeast_ACT1_WT_DBR1_Prp18kd_exp48: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/noUV_Prp22-FLAG_yeast_noUV_ACT1_WT_Prp22-WT_DBR1_Prp18-depleted_20190416_JU.fq.gz", "WT_actin_substrate"]
-    noUV_Prp22_K512A_yeast_ACT1_dG_DBR1_Prp18kd_exp51: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/noUV_Prp22_K512A_FLAG_yeast_noUV_ACT1_dG_Prp22_K512A_DBR1_Prp18_depleted_20190416_JU_2.fq.gz","ACT1_dG_substrate"]
-    noUV_Prp22_K512A_yeast_ACT1_dG_DBR1_Prp18kd_exp50: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/noUV_Prp22_K512A_FLAG_yeast_noUV_ACT1_dG_Prp22_K512A_DBR1_Prp18_depleted_20190416_JU.fq.gz","ACT1_dG_substrate"]
-    noUV_Prp22_K512A_yeast_ACT1_WT_DBR1_Prp18kd_exp53: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/noUV_Prp22_K512A_FLAG_yeast_noUV_ACT1_WT_Prp22_K512A_DBR1_Prp18_depleted_20190416_JU_2.fq.gz", "WT_actin_substrate"]
-    noUV_Prp22_K512A_yeast_ACT1_WT_DBR1_Prp18kd_exp52: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/noUV_Prp22_K512A_FLAG_yeast_noUV_ACT1_WT_Prp22_K512A_DBR1_Prp18_depleted_20190416_JU.fq.gz", "WT_actin_substrate"]
-
-    Prp22_yeast_ACT1_dG_DBR1_Prp18kd_exp47: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/Prp22-FLAG_yeast_UV_ACT1_dG_Prp22-WT_DBR1_Prp18-depleted_20190416_JU_2.fq.gz","ACT1_dG_substrate"]
-    Prp22_yeast_ACT1_dG_DBR1_Prp18kd_exp46: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/Prp22-FLAG_yeast_UV_ACT1_dG_Prp22-WT_DBR1_Prp18-depleted_20190416_JU.fq.gz","ACT1_dG_substrate"]
-    Prp22_yeast_ACT1_WT_DBR1_Prp18kd_exp49: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/Prp22-FLAG_yeast_UV_ACT1_WT_Prp22-WT_DBR1_Prp18-depleted_20190416_JU_2.fq.gz", "WT_actin_substrate"]
-    Prp22_yeast_ACT1_WT_DBR1_Prp18kd_exp48: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/Prp22-FLAG_yeast_UV_ACT1_WT_Prp22-WT_DBR1_Prp18-depleted_20190416_JU.fq.gz", "WT_actin_substrate"]
-    Prp22_K512A_yeast_ACT1_dG_DBR1_Prp18kd_exp51: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/Prp22_K512A_FLAG_yeast_ACT1_dG_Prp22_K512A_FLAG_DBR1_Prp18_depleted_20190416_JU_2.fq.gz","ACT1_dG_substrate"]
-    Prp22_K512A_yeast_ACT1_dG_DBR1_Prp18kd_exp50: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/Prp22_K512A_FLAG_yeast_ACT1_dG_Prp22_K512A_FLAG_DBR1_Prp18_depleted_20190416_JU.fq.gz","ACT1_dG_substrate"]
-    Prp22_K512A_yeast_ACT1_WT_DBR1_Prp18kd_exp53: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/Prp22_K512A_FLAG_yeast_ACT1_WT_Prp22_K512A_FLAG_DBR1_Prp18_depleted_20190416_JU_2.fq.gz", "WT_actin_substrate"]
-    Prp22_K512A_yeast_ACT1_WT_DBR1_Prp18kd_exp52: ["/home/camp/capitac/working/lisa/raw_sequencing_data/201905_UN1904LS/Prp22_K512A_FLAG_yeast_ACT1_WT_Prp22_K512A_FLAG_DBR1_Prp18_depleted_20190416_JU.fq.gz", "WT_actin_substrate"]
-
-# miCLIP
-    m6a_P_Complex_exp1: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/m6A_Pcomplex_exp_1.fq.gz", "WT_LS54_substrate"]
-    m6a_Cstar_Complex_exp1: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/m6A_Ccomplex_exp_1.fq.gz", "dG_UBC4_long_substrate"]
-    pseudoU_P_Complex_exp1: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/pseudoU_Pcomplex_exp_1.fq.gz", "WT_LS54_substrate"]
-    pseudoU_Cstar_Complex_exp1: ["/camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/data/LMB_22.11.18/pseudoU_Ccomplex_exp_1.fq.gz", "dG_UBC4_long_substrate"]
-
-# Files for index generation and mapping 
+############## Files for index generation and mapping #############
 
 #ACT1_3xMS2
-ACT1_3xMS2_genome: /camp/lab/luscomben/working/lisa/substrate-omes/ACT1_WT-MS2.fa
-ACT1_3xMS2_gtf_file: /camp/lab/luscomben/working/lisa/substrate-omes/ACT1_WT-MS2.final.gtf
+ACT1_3xMS2_genome: substrate-omes/ACT1_WT-MS2.fa
+ACT1_3xMS2_gtf_file: substrate-omes/ACT1_WT-MS2.final.gtf
 
 #ACT1_dG
-ACT1_dG_genome: /camp/lab/luscomben/working/lisa/substrate-omes/ACT1_dG.fa
-ACT1_dG_gtf_file: /camp/lab/luscomben/working/lisa/substrate-omes/ACT1_dG.final.gtf
+ACT1_dG_genome: substrate-omes/ACT1_dG.fa
+ACT1_dG_gtf_file: substrate-omes/ACT1_dG.final.gtf
 
 #ACT1_AC_ext20
-ACT1_AC_ext20_genome: /camp/lab/luscomben/working/lisa/substrate-omes/ACT1_ext20.fa 
-ACT1_AC_ext20_gtf_file: /camp/lab/luscomben/working/lisa/substrate-omes/ACT1_ext20.final.gtf
+ACT1_AC_ext20_genome: substrate-omes/ACT1_ext20.fa 
+ACT1_AC_ext20_gtf_file: substrate-omes/ACT1_ext20.final.gtf
 
 #ACT1_AC_ext40_substrate
-ACT1_AC_ext40_substrate_genome: /camp/lab/luscomben/working/lisa/substrate-omes/ACT1_ext40.fa
-ACT1_AC_ext40_substrate_gtf_file: /camp/lab/luscomben/working/lisa/substrate-omes/ACT1_ext40.final.gtf
+ACT1_AC_ext40_substrate_genome: substrate-omes/ACT1_ext40.fa
+ACT1_AC_ext40_substrate_gtf_file: substrate-omes/ACT1_ext40.final.gtf
 
 #ACT1_AC_extSL_substrate
-ACT1_AC_extSL_substrate_genome: /camp/lab/luscomben/working/lisa/substrate-omes/ACT1_extSL.fa
-ACT1_AC_extSL_substrate_gtf_file: /camp/lab/luscomben/working/lisa/substrate-omes/ACT1_extSL.final.gtf
+ACT1_AC_extSL_substrate_genome: substrate-omes/ACT1_extSL.fa
+ACT1_AC_extSL_substrate_gtf_file: substrate-omes/ACT1_extSL.final.gtf
 
 # AC substrate
-AC_genome: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/custom_genome/AC_ome.2.fa
-AC_gtf_file: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/AC_sub.final.gtf
+AC_genome: substrate-omes/AC_ome.2.fa
+AC_gtf_file: substrate-omes/AC_sub.final.gtf
 
 # AC substrate with a longer second exon
-AC_LONG_genome: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/custom_genome/AC_long_ome.fa
-AC_LONG_gtf_file: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/AC_sub_long.final.gtf
+AC_LONG_genome: substrate-omes/AC_long_ome.fa
+AC_LONG_gtf_file: substrate-omes/AC_sub_long.final.gtf
 
 # WT substrate long exon 2
-WT_LONG_genome: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/custom_genome/WT_long_ome.fa
-WT_LONG_gtf_file: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/WT_sub_long.final.gtf
+WT_LONG_genome: substrate-omes/WT_long_ome.fa
+WT_LONG_gtf_file: substrate-omes/WT_sub_long.final.gtf
 
 # DG substrate
-DG_genome: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/custom_genome/dG_ome.fa
-DG_gtf_file: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/dG_sub.final.gtf
+DG_genome: substrate-omes/dG_ome.fa
+DG_gtf_file: substrate-omes/dG_sub.final.gtf
 
 #dG_UBC4_long_substrate
-DG_LONG_genome: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/custom_genome/dG_long_ome.fa
-DG_LONG_gtf_file: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/dG_long_sub.final.gtf
+DG_LONG_genome: substrate-omes/dG_long_ome.fa
+DG_LONG_gtf_file: substrate-omes/dG_long_sub.final.gtf
 
 # WT 1400 substrate
-WT1400_genome: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/custom_genome/WT1400_ome.fa
-WT1400_gtf_file: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/WT1400_sub.final.gtf
+WT1400_genome: substrate-omes/WT1400_ome.fa
+WT1400_gtf_file: substrate-omes/WT1400_sub.final.gtf
 
 # WT LS54 substrate
-WTLS54_genome: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/custom_genome/WTLS54_ome.fa
-WTLS54_gtf_file: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/WTLS54_sub.final.gtf
+WTLS54_genome: substrate-omes/WTLS54_ome.fa
+WTLS54_gtf_file: substrate-omes/WTLS54_sub.final.gtf
 
 # Actin WT substrate
-WT_actin_genome: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/custom_genome/WT_actin.fa
-WT_actin_gtf_file: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/WT_actin.final.gtf
+WT_actin_genome: substrate-omes/WT_actin.fa
+WT_actin_gtf_file: substrate-omes/WT_actin.final.gtf
 
 # Actin AC substrate
-AC_actin_genome: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/custom_genome/AC_actin.fa
-AC_actin_gtf_file: /camp/lab/luscomben/working/charlotte/lisa_invitro_splicing/AC_actin.final.gtf
+AC_actin_genome: substrate-omes/AC_actin.fa
+AC_actin_gtf_file: substrate-omes/AC_actin.final.gtf
 
 # Yeast genome
-yeast_genome: /camp/lab/luscomben/working/charlotte/yeast_S288C_R64-1-1_ENSEMBL/fasta/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa
-yeast_gtf_file: /camp/lab/luscomben/working/charlotte/yeast_S288C_R64-1-1_ENSEMBL/Saccharomyces_cerevisiae.R64-1-1.91.gtf
+yeast_genome: yeast-genome/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa.gz
+yeast_gtf_file: yeast-genome/Saccharomyces_cerevisiae.R64-1-1.99.gtf.gz
 
 # Parameters for key steps
 trim_galore_params: AGATCGGAAGGCGGTTCAG # Provide 3' adaptor sequence or use True to use default illumina

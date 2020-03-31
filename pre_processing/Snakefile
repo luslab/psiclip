@@ -15,17 +15,11 @@ rule all:
         "results/WT_LONG_star_index/exonInfo.tab",
         expand("results/mapped/{sample}.Aligned.out.forward.sorted.bam", sample=config["samples"]),
         expand("results/xlsites/{sample}.small.bedgraph", sample=config["samples"]),
-        # Uncomment the below statement to calculate mapped cDNA lengths
-        #expand("results/lengths/{sample}.lengths.tsv", sample=config["samples"]),
         expand("results/genome_mapped/{sample}.Aligned.sortedByCoord.out.bam", sample=config["samples"]),
         expand("results/merged/{sample}.cdnacounts", sample=config["samples"]),
         expand("results/merged/{sample}.bed", sample=config["samples"]),
         expand("results/mapped/{sample}.Aligned.out.sorted.DEDUPLICATED.bam", sample=config["samples"]),
         expand("results/mapped/{sample}.Aligned.out.sorted.DEDUPLICATED.bam.bai", sample=config["samples"])
-        # Uncomment the below statements to map to phiX at the end 
-        # as an additional contamination check
-        #expand("results/phiX_mapped/{sample}.Aligned.out.sam", sample=config["samples"])
-        #expand("results/logs/{sample}.phiX_mapped.Log.final.out", sample=config["samples"])
 
 # Reads are dumultiplexed prior to the pipeline using iCount demultiplex
 
@@ -398,7 +392,7 @@ rule getAllReadlengths:
 # # from creating novel splice junctions. --outFilterMismatchNmax 2 means we allow a maximum
 # # of 2 mismatches. --seedSearchStartLmax 16 means that the read is split into more seeds
 # # resulting potentially in a more sensitive search better for shorter reads - got this
-# # parameter from a post about ribosome profiling
+# # parameter from ribosome profiling
 
 
 rule mapReads:
@@ -491,16 +485,12 @@ rule seperateFandR: # We need to salvage the reads that mapped to the reverse st
         sambamba view -t {threads} -S -f bam -F "not reverse_strand" {input.mapped_sam} -o {params.justForward_bam}
         sambamba sort -t {threads} {params.justForward_bam} -o {output.justForward_bam_sorted}
         sambamba index -t {threads} {output.justForward_bam_sorted} {output.justForward_bam_index}
-
         echo "Get reads that did not"
         sambamba view -t {threads} -S -f bam -F "reverse_strand" {input.mapped_sam} -o {params.justReverse_bam}
-
         echo "Convert to FASTQ"
         bedtools bamtofastq -i {params.justReverse_bam} -fq {params.tempfastq}
-
         echo "Merge with unmapped FASTQ from STAR substrate-ome mapping"
         cat {params.tempfastq} {input.unmapped_fastq} > {output.minusmerged_fastq}
-
         # Get rid of intermediate Files
         rm {params.justForward_bam}
         rm {params.justReverse_bam}
@@ -516,7 +506,6 @@ rule getCDNAcounts:
         "results/mapped/{sample}.Aligned.out.forward.sorted.bam"
     output:
         bed="results/xlsites/{sample}.small.Aligned.out.sorted.bed",
-        cDNAbed="results/xlsites/{sample}.small.cDNA.nosplices.bed",
         cdnacounts="results/xlsites/{sample}.small.Aligned.out.sorted.cdnacounts",
         bedgraph="results/xlsites/{sample}.small.bedgraph",
         temp1="results/lengths/{sample}.temp1.sub.bam"
@@ -529,7 +518,6 @@ rule getCDNAcounts:
         bedtools bamtobed -i {input} > {output.bed}
         bedtools bamtobed -i {output.temp1} > {params.temp2}
         Rscript --vanilla scripts/getcDNAcounts.R {output.bed} {output.cdnacounts}
-        Rscript --vanilla scripts/getcDNABed.R {params.temp2} {output.cDNAbed}
         cut -f1,2,3,5 {output.cdnacounts} > {output.bedgraph}
         sed -i '1 i\ track type=bedGraph' {output.bedgraph}
         rm {params.temp2}
@@ -550,27 +538,6 @@ rule getDeDupedBam:
         samtools index {output.dedupe_bam}
         """
 
-
-# Get the read lengths of the reads and cDNAs that have singly mapped to the substrate
-
-rule getLengths:
-    input:
-        bam="results/lengths/{sample}.temp1.sub.bam",
-        cDNA="results/xlsites/{sample}.small.cDNA.nosplices.bed"
-    output:
-        lengths="results/lengths/{sample}.smallRNA_lengths.tsv"
-    params:
-        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00",
-        bamtemp="results/lengths/{sample}.bamtemp_lengths.tsv",
-        cDNAtemp="results/lengths/{sample}.cDNAtemp_lengths.tsv",
-        sample="{sample}"
-    shell:
-        """
-        samtools view -F 4 -q 255 {input.bam} | awk '{{print $1 "\\t" length($10) "\\tread\\t{params.sample}\\tsubstrate_ome"}}' | sort -u > {params.bamtemp}
-        awk '{{print $4 "\\t" $3-$2 "\\tcDNA\\t{params.sample}\\tsubstrate_ome"}}' {input.cDNA} | sort -u > {params.cDNAtemp}
-        cat {params.bamtemp} {params.cDNAtemp} > {output.lengths}
-        rm {params.bamtemp} {params.cDNAtemp} {input.bam}
-        """
 
 # ##########################################################################################
 # # Now we repeat the process with some slight differences to map the unmapped reads to the
@@ -629,19 +596,6 @@ rule genomeMapreads:
         mv {params.log} {output.logfolder}
         """
 
-rule getUnmappedReadlengths:
-    input:
-        "results/genome_mapped/{sample}.Unmapped.out.mate1"
-    output:
-        "results/lengths/{sample}.unmapped_read_lengths.tsv"
-    params:
-        sample="{sample}",
-        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00"
-    shell:
-        """
-        cat {input} | awk '{{if(NR%4==2) print "read_x\\t" length($1) "\\tread\\t{params.sample}\\tunmapped_reads"}}' > {output}
-        """
-
 # The awk command is to remove spliced reads from one file because this messes up counting the length of the 
 # singly mapped cDNAs.
 
@@ -650,7 +604,6 @@ rule getgenomeCDNAcounts:
         "results/genome_mapped/{sample}.Aligned.sortedByCoord.out.bam"
     output:
         bed="results/genome_xlsites/{sample}.Aligned.out.sorted.bed",
-        cDNAbed="results/genome_xlsites/{sample}.cDNA.nosplices.bed",
         cdnacounts="results/genome_xlsites/{sample}.Aligned.out.sorted.cdnacounts",
         temp1="results/lengths/{sample}.temp1.bam"
     params:
@@ -661,45 +614,8 @@ rule getgenomeCDNAcounts:
         samtools view -h {input} | awk '{{if($0 ~ /^@/ || $6 !~ /N/) {{print $0}}}}' | samtools view -Sb > {output.temp1}
         bedtools bamtobed -i {input} > {output.bed}
         bedtools bamtobed -i {output.temp1} > {params.temp2}
-        Rscript --vanilla scripts/getcDNAcounts.R {output.bed} {output.cdnacounts}
         Rscript --vanilla scripts/getcDNABed.R {params.temp2} {output.cDNAbed}
         rm {params.temp2}
-        """
-
-rule getGenomeLengths:
-    input:
-        bam="results/lengths/{sample}.temp1.bam",
-        cDNA="results/genome_xlsites/{sample}.cDNA.nosplices.bed"
-    output:
-        lengths="results/lengths/{sample}.genomicRNA_lengths.tsv"
-    params:
-        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00",
-        
-        bamtemp="results/lengths/{sample}.genbamtemp_lengths.tsv",
-        cDNAtemp="results/lengths/{sample}.gencDNAtemp_lengths.tsv",
-        sample="{sample}"
-    shell:
-        """
-        samtools view -F 4 -q 255 {input.bam} | awk '{{print $1 "\\t" length($10) "\\tread\\t{params.sample}\\tgenome"}}' | sort -u > {params.bamtemp}
-        awk '{{print $4 "\\t" $3-$2 "\\tcDNA\\t{params.sample}\\tgenome"}}' {input.cDNA} | sort -u > {params.cDNAtemp}
-        cat {params.bamtemp} {params.cDNAtemp} > {output.lengths}
-        rm {params.bamtemp} {params.cDNAtemp} {input.bam}
-        """
-
-rule mergeLengths:
-    input:
-        small_lengths="results/lengths/{sample}.smallRNA_lengths.tsv",
-        genome_lengths="results/lengths/{sample}.genomicRNA_lengths.tsv",
-        all_reads="results/lengths/{sample}.all_read_lengths.tsv",
-        unmapped_reads="results/lengths/{sample}.unmapped_read_lengths.tsv"
-    output:
-        lengths="results/lengths/{sample}.lengths.tsv"
-    params:
-        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00"
-    shell:
-        """
-        cat {input.small_lengths} {input.genome_lengths} {input.all_reads} {input.unmapped_reads} > {output.lengths}
-        rm {input.small_lengths} {input.genome_lengths} {input.all_reads} {input.unmapped_reads}
         """
 
 # Merge cDNA files to get total cDNA number
@@ -720,30 +636,4 @@ rule getMerged:
         """
         cat {input.substrate_cdna} {input.genome_cdna} > {output.merged_cdna}
         cat {input.substrate_reads} {input.genome_reads} > {output.merged_reads}
-        """
-
-# PhiX mapping to check for contamination
-rule mapPhi:
-    input:
-        fastq="results/genome_mapped/{sample}.Unmapped.out.mate1"
-    output:
-        sam="results/phiX_mapped/{sample}.Aligned.out.sam",
-        logfolder="results/logs/{sample}.phiX_mapped.Log.final.out"
-    params:
-        star_index="/home/camp/capitac/working/charlotte/lisa_invitro_splicing/phiX_genome",
-        log="results/phiX_mapped/{sample}.Log.final.out",
-        outprefix="results/phiX_mapped/{sample}.",
-        cluster= '-N 1 -c 8 --mem=64G --part=cpu -t 1:00:00'
-    threads:
-        8
-    shell:
-        """
-        STAR --runThreadN {threads} \
-        --genomeDir {params.star_index} \
-        --readFilesIn {input.fastq} \
-        --outFileNamePrefix {params.outprefix} --limitBAMsortRAM 6000000000 \
-        --outFilterMultimapNmax 1 --outFilterMultimapScoreRange 1 --outReadsUnmapped Fastx \
-        --outFilterType BySJout --outFilterScoreMin 10 \
-        --outFilterMismatchNmax 2 
-        mv {params.log} {output.logfolder}
         """
