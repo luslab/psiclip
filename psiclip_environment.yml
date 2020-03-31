@@ -23,5 +23,13 @@ dependencies:
   - r-lemon
   - r-scales
   - r-forcats
-  - snakemake
-  
+  - snakemake=5.13.0
+  - bam-readcount
+  - r-smoother
+  - r-r.utils
+  - r-ggthemes
+  - r-zoo
+  - r-cowplot
+  - r-ggridges
+  - r-plyr
+  - r-quantreg
