@@ -1,6 +1,11 @@
 # Run all the pre-processing
 # Charlotte Capitanchik last edit 30.03.20
 
+# Step 0. Make some directories we need
+mkdir data
+mkdir data/fastq
+mkdir pre_processing/yeast-genome
+
 # Step 1. Download the metadata from array express
 wget https://www.ebi.ac.uk/arrayexpress/files/E-MTAB-8895/E-MTAB-8895.sdrf.txt -O metadata.tsv
 echo "Step 1 completed: Downloaded metadata from array express"
