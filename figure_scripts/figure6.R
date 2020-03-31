@@ -2,7 +2,6 @@ library(data.table)
 library(dplyr)
 library(ggplot2)
 library(smoother)
-library(splines)
 library(R.utils)
 cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
           "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
