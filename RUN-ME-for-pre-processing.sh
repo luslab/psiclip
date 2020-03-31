@@ -30,8 +30,12 @@ echo "Step 3 completed: Downloaded yeast genome and annotation from Ensembl"
 
 # Step 4. Set up a conda environment with the software you need
 conda env create -f psiclip_environment.yml
+conda init bash
 conda activate psiclip
 echo "Step 4 completed: Created & activated psiclip conda environment"
 
 # Step 5. Run the Snakemake
 snakemake -k --cluster 'sbatch {params.cluster}' --jobs 200 --latency-wait 60 --rerun-incomplete
+
+# Step 6. exit the environment
+conda deactivate
