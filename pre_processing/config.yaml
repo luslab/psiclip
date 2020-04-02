@@ -153,8 +153,8 @@ AC_actin_genome: substrate-omes/AC_actin.fa
 AC_actin_gtf_file: substrate-omes/AC_actin.final.gtf
 
 # Yeast genome
-yeast_genome: yeast-genome/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa.gz
-yeast_gtf_file: yeast-genome/Saccharomyces_cerevisiae.R64-1-1.99.gtf.gz
+yeast_genome: yeast-genome/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa
+yeast_gtf_file: yeast-genome/Saccharomyces_cerevisiae.R64-1-1.99.gtf
 
 # Parameters for key steps
 trim_galore_params: AGATCGGAAGGCGGTTCAG # Provide 3' adaptor sequence or use True to use default illumina

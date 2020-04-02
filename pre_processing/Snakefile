@@ -383,7 +383,7 @@ rule getAllReadlengths:
         cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00"
     shell:
         """
-        zcat {input} | fastx_collapser > {params.deduped}
+        zcat < {input} | fastx_collapser > {params.deduped}
         cat {params.deduped} | awk '{{if(NR%4==2) print "read_x\\t" length($1) "\\tread\\t{params.sample}\\tall_reads"}}' > {output}
         rm {params.deduped}
         """
@@ -455,7 +455,7 @@ rule mapReads:
             star_index="results/ACT1_dG_star_index"
         shell("STAR --runThreadN {threads} \
         --genomeDir {star_index} \
-        --readFilesIn {input.fastq}  --readFilesCommand zcat \
+        --readFilesIn {input.fastq}  --readFilesCommand gunzip -c \
         --outFileNamePrefix {params.outprefix} --genomeLoad NoSharedMemory \
         --outFilterMultimapNmax 1 --outFilterMultimapScoreRange 1 \
         --outSAMattributes All --outFilterType BySJout --outFilterScoreMin 10 --alignEndsType EndToEnd \
@@ -507,20 +507,15 @@ rule getCDNAcounts:
     output:
         bed="results/xlsites/{sample}.small.Aligned.out.sorted.bed",
         cdnacounts="results/xlsites/{sample}.small.Aligned.out.sorted.cdnacounts",
-        bedgraph="results/xlsites/{sample}.small.bedgraph",
-        temp1="results/lengths/{sample}.temp1.sub.bam"
+        bedgraph="results/xlsites/{sample}.small.bedgraph"
     params:
-        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00",
-        temp2="results/lengths/{sample}.temp2.bed"
+        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00"
     shell:
         """
-        samtools view -h {input} | awk '{{if($0 ~ /^@/ || $6 !~ /N/) {{print $0}}}}' | samtools view -Sb > {output.temp1}
         bedtools bamtobed -i {input} > {output.bed}
-        bedtools bamtobed -i {output.temp1} > {params.temp2}
         Rscript --vanilla scripts/getcDNAcounts.R {output.bed} {output.cdnacounts}
         cut -f1,2,3,5 {output.cdnacounts} > {output.bedgraph}
-        sed -i '1 i\ track type=bedGraph' {output.bedgraph}
-        rm {params.temp2}
+        echo '1 i\ track type=bedGraph' | cat - {output.bedgraph} > temp && mv temp {output.bedgraph}
         """
 
 # Get de-duplicated bam files to do mutation analysis
@@ -604,18 +599,13 @@ rule getgenomeCDNAcounts:
         "results/genome_mapped/{sample}.Aligned.sortedByCoord.out.bam"
     output:
         bed="results/genome_xlsites/{sample}.Aligned.out.sorted.bed",
-        cdnacounts="results/genome_xlsites/{sample}.Aligned.out.sorted.cdnacounts",
-        temp1="results/lengths/{sample}.temp1.bam"
+        cdnacounts="results/genome_xlsites/{sample}.Aligned.out.sorted.cdnacounts"
     params:
-        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00",
-        temp2="results/lengths/{sample}.temp2.bed"
+        cluster="-N 1 -c 1 --mem=8G --part=cpu -t 1:00:00"
     shell:
         """
-        samtools view -h {input} | awk '{{if($0 ~ /^@/ || $6 !~ /N/) {{print $0}}}}' | samtools view -Sb > {output.temp1}
         bedtools bamtobed -i {input} > {output.bed}
-        bedtools bamtobed -i {output.temp1} > {params.temp2}
-        Rscript --vanilla scripts/getcDNABed.R {params.temp2} {output.cDNAbed}
-        rm {params.temp2}
+        Rscript --vanilla scripts/getcDNAcounts.R {output.bed} {output.cdnacounts}
         """
 
 # Merge cDNA files to get total cDNA number

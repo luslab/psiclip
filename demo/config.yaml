@@ -1,0 +1,69 @@
+# Define samples
+samples:
+    ctrl_no_FLAGed_protein_UV_ACT1_AC_exp21: ["ERR3988022.fq.gz", "AC_actin_substrate"]
+
+
+############## Files for index generation and mapping #############
+
+#ACT1_3xMS2
+ACT1_3xMS2_genome: ../pre_processing/substrate-omes/ACT1_WT-MS2.fa
+ACT1_3xMS2_gtf_file: ../pre_processing/substrate-omes/ACT1_WT-MS2.final.gtf
+
+#ACT1_dG
+ACT1_dG_genome: ../pre_processing/substrate-omes/ACT1_dG.fa
+ACT1_dG_gtf_file: ../pre_processing/substrate-omes/ACT1_dG.final.gtf
+
+#ACT1_AC_ext20
+ACT1_AC_ext20_genome: ../pre_processing/substrate-omes/ACT1_ext20.fa 
+ACT1_AC_ext20_gtf_file: ../pre_processing/substrate-omes/ACT1_ext20.final.gtf
+
+#ACT1_AC_ext40_substrate
+ACT1_AC_ext40_substrate_genome: ../pre_processing/substrate-omes/ACT1_ext40.fa
+ACT1_AC_ext40_substrate_gtf_file: ../pre_processing/substrate-omes/ACT1_ext40.final.gtf
+
+#ACT1_AC_extSL_substrate
+ACT1_AC_extSL_substrate_genome: ../pre_processing/substrate-omes/ACT1_extSL.fa
+ACT1_AC_extSL_substrate_gtf_file: ../pre_processing/substrate-omes/ACT1_extSL.final.gtf
+
+# AC substrate
+AC_genome: ../pre_processing/substrate-omes/AC_ome.2.fa
+AC_gtf_file: ../pre_processing/substrate-omes/AC_sub.final.gtf
+
+# AC substrate with a longer second exon
+AC_LONG_genome: ../pre_processing/substrate-omes/AC_long_ome.fa
+AC_LONG_gtf_file: ../pre_processing/substrate-omes/AC_sub_long.final.gtf
+
+# WT substrate long exon 2
+WT_LONG_genome: ../pre_processing/substrate-omes/WT_long_ome.fa
+WT_LONG_gtf_file: ../pre_processing/substrate-omes/WT_sub_long.final.gtf
+
+# DG substrate
+DG_genome: ../pre_processing/substrate-omes/dG_ome.fa
+DG_gtf_file: ../pre_processing/substrate-omes/dG_sub.final.gtf
+
+#dG_UBC4_long_substrate
+DG_LONG_genome: ../pre_processing/substrate-omes/dG_long_ome.fa
+DG_LONG_gtf_file: ../pre_processing/substrate-omes/dG_long_sub.final.gtf
+
+# WT 1400 substrate
+WT1400_genome: ../pre_processing/substrate-omes/WT1400_ome.fa
+WT1400_gtf_file: ../pre_processing/substrate-omes/WT1400_sub.final.gtf
+
+# WT LS54 substrate
+WTLS54_genome: ../pre_processing/substrate-omes/WTLS54_ome.fa
+WTLS54_gtf_file: ../pre_processing/substrate-omes/WTLS54_sub.final.gtf
+
+# Actin WT substrate
+WT_actin_genome: ../pre_processing/substrate-omes/WT_actin.fa
+WT_actin_gtf_file: ../pre_processing/substrate-omes/WT_actin.final.gtf
+
+# Actin AC substrate
+AC_actin_genome: ../pre_processing/substrate-omes/AC_actin.fa
+AC_actin_gtf_file: ../pre_processing/substrate-omes/AC_actin.final.gtf
+
+# Yeast genome
+yeast_genome: ../pre_processing/yeast-genome/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa
+yeast_gtf_file: ../pre_processing/yeast-genome/Saccharomyces_cerevisiae.R64-1-1.99.gtf
+
+# Parameters for key steps
+trim_galore_params: AGATCGGAAGGCGGTTCAG # Provide 3' adaptor sequence or use True to use default illumina
